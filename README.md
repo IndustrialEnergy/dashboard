@@ -21,7 +21,7 @@ The organization of the repo follows best practices:
 ├── environment.yml
 └── tools
 │   ├── *_data_update.* (.cmd, .sh)
-└── src
+└── dashboard_app
     ├── app.py
     ├── server.py
     ├── sql_scrips.py
