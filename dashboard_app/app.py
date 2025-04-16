@@ -18,6 +18,9 @@ from dashboard_app.pages.docs_page import create_docs_page
 from dashboard_app.pages.data_page import create_data_page
 from dashboard_app.pages.contact_page import create_contact_page
 
+# Import callbacks
+from dashboard_app.callbacks.dashboard_callback import register_dashboard_callbacks
+
 
 def create_app():
     # Get absolute path to assets folder
@@ -50,8 +53,14 @@ def create_app():
 
     # Load data
     integrated_df = load_integrated_dataset()
+    print(integrated_df.shape)
+    print(integrated_df.info())
+
+    boxplot_cost_df = integrated_df[['naics', 'fy', 'impstatus', 'arc2', 'ref_year_impcost']]
+    boxplot_payback_df = integrated_df[['naics', 'fy', 'impstatus', 'arc2', 'payback']]
 
     # Initialize callbacks
+    register_dashboard_callbacks(app, integrated_df, boxplot_cost_df, boxplot_payback_df)
 
 
     # URL Routing
@@ -67,7 +76,7 @@ def create_app():
         if pathname == "/about":
             return create_about_page()
         elif pathname == "/dashboard":
-            return create_dashboard_page()
+            return create_dashboard_page(integrated_df, boxplot_cost_df, boxplot_payback_df)
         elif pathname == "/documentation":
             return create_docs_page()
         elif pathname == "/data":

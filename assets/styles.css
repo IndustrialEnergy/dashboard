@@ -112,7 +112,7 @@ body {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
     font-size: clamp(24px, 4vw, 32px);
-    color: #2C3E50;
+    color: #2C3E50 !important;/* #2C3E50; */
     margin-bottom: 20px;
 }
 
@@ -184,3 +184,44 @@ body {
 .download-button:hover {
     background-color: #246B42 !important; /* #4CAF50 */
 }
+
+.section-header {
+    font-weight: bold;
+    font-family: 'Inter', sans-serif;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 0.5rem;
+    color: #2C3E50 !important;
+}
+
+/* table */
+
+.table-wrapper {
+    margin: 20px auto;
+    width: 90%;
+}
+
+.data-table {
+    overflow-x: auto;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* filters */
+
+.filters {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 300px;
+    margin: 0 auto 30px auto;
+}
+
+.dropdown {
+    font-size: 14px;
+}
+
+.radio-group {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+

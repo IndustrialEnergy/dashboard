@@ -1,0 +1,1 @@
+from .dashboard_callback import register_dashboard_callbacks
