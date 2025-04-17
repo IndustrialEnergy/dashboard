@@ -19,7 +19,8 @@ from dashboard_app.pages.data_page import create_data_page
 from dashboard_app.pages.contact_page import create_contact_page
 
 # Import callbacks
-from dashboard_app.callbacks.dashboard_callback import register_dashboard_callbacks
+from dashboard_app.callbacks.cost_boxplot_callback import cost_boxplot_callback
+from dashboard_app.callbacks.payback_boxplot_callback import payback_boxplot_callback
 
 
 def create_app():
@@ -58,9 +59,11 @@ def create_app():
 
     boxplot_cost_df = integrated_df[['naics', 'fy', 'impstatus', 'arc2', 'ref_year_impcost']]
     boxplot_payback_df = integrated_df[['naics', 'fy', 'impstatus', 'arc2', 'payback']]
+    boxplot_payback_df = integrated_df[['naics', 'fy', 'impstatus', 'arc2', 'payback']]
 
     # Initialize callbacks
-    register_dashboard_callbacks(app, integrated_df, boxplot_cost_df, boxplot_payback_df)
+    cost_boxplot_callback(app, integrated_df, boxplot_cost_df, boxplot_payback_df)
+    payback_boxplot_callback(app, boxplot_payback_df)
 
 
     # URL Routing

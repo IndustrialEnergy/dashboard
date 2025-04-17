@@ -1,9 +1,9 @@
 from dash import Input, Output
-from charts.boxplot_cost import create_boxplot_cost_chart
+from charts.boxplot_payback import create_boxplot_payback_chart
 
-def register_dashboard_callbacks(app, boxplot_cost_df, integrated_df,  boxplot_payback_df):
+def payback_boxplot_callback(app, boxplot_payback_df):
     @app.callback(
-        Output("cost-boxplot", "figure"),
+        Output("payback-boxplot", "figure"), 
         #Output("recommendation-table", "children"),
         Input("naics-filter", "value"),
         Input("fy-filter", "value"),
@@ -11,7 +11,7 @@ def register_dashboard_callbacks(app, boxplot_cost_df, integrated_df,  boxplot_p
         Input("arc2-filter", "value"),
     )
     def update_outputs(naics, fy, impstatus, arc2):
-        dff = boxplot_cost_df.copy()
+        dff = boxplot_payback_df.copy()
 
         if naics:
             dff = dff[dff["naics"].isin(naics)]
@@ -22,4 +22,4 @@ def register_dashboard_callbacks(app, boxplot_cost_df, integrated_df,  boxplot_p
         if arc2:
             dff = dff[dff["arc2"].isin(arc2)]
 
-        return create_boxplot_cost_chart(dff)
+        return create_boxplot_payback_chart(dff)

@@ -22,16 +22,6 @@ def create_filters(df):
             )
         ], width=3),
 
-        # dbc.Col([
-        #     dcc.Checklist(
-        #         id="impstatus-filter",
-        #         options=[{"label": str(val), "value": val} for val in sorted(df["impstatus"].dropna().unique())],
-        #         value=["N","I"],
-        #         #labelStyle={"display": "inline-block", "marginRight": "10px"},
-        #     )
-        # ], #width=3
-        # ),
-
         dbc.Col([
             dcc.Checklist(
                 id = "impstatus-filter",
@@ -49,7 +39,7 @@ def create_filters(df):
                         "value": "P",
                     },
                     {
-                        "label": html.Div(['Uknwown'], style={'color': 'Black', 'font-size': 15, "padding-left" :"5px"}),
+                        "label": html.Div(['Unknown'], style={'color': 'Black', 'font-size': 15, "padding-left" :"5px"}),
                         "value": "K",
                     },
                 ], 
@@ -63,6 +53,7 @@ def create_filters(df):
                 id="arc2-filter",
                 options=[{"label": val, "value": val} for val in sorted(df["arc2"].dropna().unique())],
                 placeholder="Select ARC2",
+                value=[2.1224, 2.4236],
                 multi=True
             )
         ], width=3),

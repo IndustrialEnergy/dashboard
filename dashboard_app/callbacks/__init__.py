@@ -1,1 +1,1 @@
-from .dashboard_callback import register_dashboard_callbacks
+from .cost_boxplot_callback import cost_boxplot_callback

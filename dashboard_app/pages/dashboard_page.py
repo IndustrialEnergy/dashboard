@@ -4,7 +4,7 @@ from dash.dependencies import Input, Output, State
 from layouts.base_layout import create_base_layout
 from components.filters import create_filters
 # Import charts
-from dashboard_app.charts import create_boxplot_cost_chart
+# from dashboard_app.charts import create_boxplot_cost_chart
 
 def create_dashboard_page(integrated_df, boxplot_cost_df, boxplot_payback_df):
     content = html.Div([
@@ -45,7 +45,7 @@ def create_dashboard_page(integrated_df, boxplot_cost_df, boxplot_payback_df):
                     dbc.Card([
                         dbc.CardHeader("Other Fuels Savings Distribution"),
                         dbc.CardBody([
-                            html.Div(id="other-fuels-boxplot", className="chart-container")
+                            html.Div(dcc.Graph(id="other-fuels-boxplot"), className="chart-container")
                         ])
                     ])
                 ], width=6),
@@ -69,7 +69,7 @@ def create_dashboard_page(integrated_df, boxplot_cost_df, boxplot_payback_df):
                     dbc.Card([
                         dbc.CardHeader("Payback Distribution"),
                         dbc.CardBody([
-                            html.Div(id="payback-container", className="chart-container")
+                            html.Div(dcc.Graph(id="payback-boxplot"), className="chart-container")
                         ])
                     ])
                 ], width=6),
