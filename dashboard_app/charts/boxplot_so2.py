@@ -1,10 +1,13 @@
 import plotly.express as px
+import plotly.graph_objects as go
+import traceback
+import pandas as pd
 
 
-def create_boxplot_payback_chart(boxplot_payback_df):
+def create_boxplot_so2_chart(boxplot_so2_df):
     # sample the data if it's too large
-    if len(boxplot_payback_df) > 10000:
-        boxplot_payback_df = boxplot_payback_df.sample(n=10000, random_state=42)
+    if len(boxplot_so2_df) > 10000:
+        boxplot_so2_df = boxplot_so2_df.sample(n=10000, random_state=42)
 
     # define status labels mapping
     status_labels = {
@@ -15,19 +18,20 @@ def create_boxplot_payback_chart(boxplot_payback_df):
     }
 
     # check if dataframe is empty after filtering
-    if boxplot_payback_df.empty:
+    if boxplot_so2_df.empty:
         return px.scatter(title="No data available for the selected filters")
 
     fig = px.box(
-        boxplot_payback_df,
+        boxplot_so2_df,
         x="arc2",
-        y="payback",
+        y="emissions_avoided",
         color="impstatus",
         boxmode="group",
+        points="suspectedoutliers",
         labels={
             "arc2": "Recommendation Type",
-            "payback": "Payback Period (years)",
-            "impstatus": "Implementation Status",
+            "emissions_avoided": "Emissions Avoided (kg)",
+            "impstatus": "Status",
         },
         category_orders={"impstatus": ["I", "N", "P", "K"]},
         template="plotly_white",

@@ -29,17 +29,17 @@ def create_dashboard_page(
             # Main content area for charts
             dbc.Col(
                 [
-                    # Active filters display
-                    html.Div(
-                        [
-                            html.H6("Active Filters:", className="d-inline-block me-2"),
-                            html.Div(
-                                id="active-filters-display", className="d-inline-block"
-                            ),
-                        ],
-                        id="active-filters-container",
-                        className="mb-3 p-2 border-bottom",
-                    ),
+                    # # Active filters display
+                    # html.Div(
+                    #     [
+                    #         html.H6("Active Filters:", className="d-inline-block me-2"),
+                    #         html.Div(
+                    #             id="active-filters-display", className="d-inline-block"
+                    #         ),
+                    #     ],
+                    #     id="active-filters-container",
+                    #     className="mb-3 p-2 border-bottom",
+                    # ),
                     # SECTION: Energy Metrics
                     dbc.Row(
                         [
@@ -192,7 +192,7 @@ def create_dashboard_page(
                                             dbc.CardBody(
                                                 [
                                                     html.Div(
-                                                        id="so2-boxplot",
+                                                        dcc.Graph(id="so2-boxplot"),
                                                         className="chart-container",
                                                     )
                                                 ]
@@ -210,7 +210,7 @@ def create_dashboard_page(
                                             dbc.CardBody(
                                                 [
                                                     html.Div(
-                                                        id="nox-boxplot",
+                                                        dcc.Graph(id="nox-boxplot"),
                                                         className="chart-container",
                                                     )
                                                 ]
