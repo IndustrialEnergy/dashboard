@@ -1,4 +1,5 @@
 import warnings
+
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -8,7 +9,7 @@ from dash import Dash, dcc, html, Input, Output, callback
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 
-# ✅ Updated local module imports
+# import pages
 from dashboard_app.data_loader import load_integrated_dataset
 
 from dashboard_app.pages.home_page import create_home_page
@@ -18,27 +19,17 @@ from dashboard_app.pages.docs_page import create_docs_page
 from dashboard_app.pages.data_page import create_data_page
 from dashboard_app.pages.contact_page import create_contact_page
 
-# Import callbacks
+# import callbacks
 from dashboard_app.callbacks.cost_boxplot_callback import cost_boxplot_callback
 from dashboard_app.callbacks.payback_boxplot_callback import payback_boxplot_callback
+from dashboard_app.callbacks.arc_filter_limit_callback import arc_filter_limit_callback
 
 
 def create_app():
-    # Get absolute path to assets folder
+    # get absolute path to assets folder
     assets_path = os.path.abspath(
         os.path.join(os.path.dirname(__file__), "..", "assets")
     )
-
-    # Debug logging
-    print(f"Current working directory: {os.getcwd()}")
-    print(f"Assets folder path: {assets_path}")
-    print(f"Assets folder exists: {os.path.exists(assets_path)}")
-
-    # List all files in assets directory
-    print("\nFiles in assets directory:")
-    for root, dirs, files in os.walk(assets_path):
-        for file in files:
-            file_path = os.path.join(root, file)
 
     app = Dash(
         __name__,
@@ -48,25 +39,31 @@ def create_app():
             "https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500&family=Inter:wght@400;500&display=swap",
         ],
         suppress_callback_exceptions=True,
-        assets_folder=assets_path,  # Set absolute path to assets
-        assets_url_path="assets",  # Explicitly set the assets URL path
+        assets_folder=assets_path,  # set absolute path to assets
+        assets_url_path="assets",  # explicitly set the assets URL path
     )
 
-    # Load data
+    # load data
     integrated_df = load_integrated_dataset()
     print(integrated_df.shape)
     print(integrated_df.info())
 
-    boxplot_cost_df = integrated_df[['naics', 'fy', 'impstatus', 'arc2', 'ref_year_impcost']]
-    boxplot_payback_df = integrated_df[['naics', 'fy', 'impstatus', 'arc2', 'payback']]
-    boxplot_payback_df = integrated_df[['naics', 'fy', 'impstatus', 'arc2', 'payback']]
+    filters_df = integrated_df[
+        ["fy", "sector", "state", "arc2", "arc_description", "impstatus"]
+    ]
+    boxplot_cost_df = integrated_df[
+        ["fy", "sector", "state", "arc2", "arc_description", "impstatus", "impcost_adj"]
+    ]
+    boxplot_payback_df = integrated_df[
+        ["fy", "sector", "state", "arc2", "arc_description", "impstatus", "payback"]
+    ]
 
-    # Initialize callbacks
-    cost_boxplot_callback(app, integrated_df, boxplot_cost_df, boxplot_payback_df)
+    # initialize callbacks
+    cost_boxplot_callback(app, boxplot_cost_df)
     payback_boxplot_callback(app, boxplot_payback_df)
+    arc_filter_limit_callback(app)
 
-
-    # URL Routing
+    # URL routing
     app.layout = html.Div(
         [dcc.Location(id="url", refresh=False), html.Div(id="page-content")]
     )
@@ -79,7 +76,9 @@ def create_app():
         if pathname == "/about":
             return create_about_page()
         elif pathname == "/dashboard":
-            return create_dashboard_page(integrated_df, boxplot_cost_df, boxplot_payback_df)
+            return create_dashboard_page(
+                filters_df
+            ) 
         elif pathname == "/documentation":
             return create_docs_page()
         elif pathname == "/data":
@@ -87,10 +86,10 @@ def create_app():
         elif pathname == "/contact":
             return create_contact_page()
         else:
-            print(f"No route match, defaulting to home page")  # Debug print
+            print(f"No route match, defaulting to home page")  # debug print
             return create_home_page()
 
-    # Navbar toggle callback - moved inside create_app()
+    # navbar toggle callback
     @app.callback(
         Output("navbar-collapse", "is_open"),
         [Input("navbar-toggler", "n_clicks")],
