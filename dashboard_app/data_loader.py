@@ -26,7 +26,7 @@ def load_integrated_dataset():
     )
 
     # convert string columns that have < 100 unique values to categorical for improved performance
-    skip_cols = ["sector", "state", "arc2", "arc_description", "impstatus"]
+    skip_cols = ["sector", "state", "arc2", "arc_description", "impstatus", "emission_type", "sourccode"]
     categorical_threshold = 100
 
     for col in integrated_df.select_dtypes(include=["object"]).columns:

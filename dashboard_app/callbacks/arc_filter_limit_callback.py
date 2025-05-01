@@ -11,7 +11,7 @@ def arc_filter_limit_callback(app):
         prevent_initial_call=True,
     )
     def limit_dropdown_selection(new_selection, current_selection):
-        max_selections = 3
+        max_selections = 4
 
         # handle initial state
         if new_selection is None:

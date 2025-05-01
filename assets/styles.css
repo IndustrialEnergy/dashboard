@@ -73,21 +73,48 @@ body {
 
 /* Range Slider Styles */
 .custom-range-slider .rc-slider-track {
-    background-color: #0F4D8B;
+    background-color: #0F4D8B;  /* Slider track color */
+    height: 3px;  /* Make the track slightly thicker */
+}
+
+.custom-range-slider .rc-slider-rail {
+    background-color: #e9ecef;  /* Background rail color */
+    height: 3px;  /* Match track height */
 }
 
 .custom-range-slider .rc-slider-handle {
-    border-color: #0F4D8B;
-    background-color: #0F4D8B;
+    border-color: #0F4D8B;  /* Handle border color */
+    width: 14px;  /* Slightly larger handles */
+    height: 14px;
+    margin-top: -5px;  /* Adjust for new size */
 }
 
 .custom-range-slider .rc-slider-handle:hover {
-    border-color: #0F4D8B; /*#45a049;*/
+    border-color: #003660;  /* Darker color on hover */
 }
 
 .custom-range-slider .rc-slider-handle:active {
-    border-color: #0F4D8B; /*#45a049;*/
-    box-shadow: 0 0 5px #0F4D8B;
+    border-color: #003660;  /* Darker color when active */
+    box-shadow: 0 0 5px #003660;  /* Add glow effect when active */
+}
+
+.custom-range-slider .rc-slider-tooltip-inner,
+.custom-range-slider .rc-slider-tooltip-content {
+    font-size: 15px !important;
+    padding: 6px 0px !important;
+    /*background-color: #003660 !important;*/
+    color: white !important;
+    border-radius: 4px !important;
+}
+
+.custom-range-slider .rc-slider-tooltip {
+    border-color: #0F4D8B !important;
+    color: white !important;
+    opacity: 1 !important;
+}
+
+.custom-range-slider .rc-slider-tooltip-arrow {
+    border-top-color: #003660 !important;
 }
 
 .chart-container {
@@ -159,11 +186,11 @@ body {
 }
 
 .filter-label {
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-    font-size: 14px;
+    font-family: 'Inter', sans-serif;    font-weight: 300;
+    font-size: 16px !important;
     color: #4A5568;
-    margin-bottom: 8px;
+    margin: 0;
+    display: block;
 }
 
 .button-text {
@@ -211,9 +238,9 @@ body {
 .filters {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
     width: 300px;
-    margin: 0 auto 30px auto;
+    margin: 0 auto 20px auto;
 }
 
 .dropdown {
@@ -223,5 +250,191 @@ body {
 .radio-group {
     font-size: 14px;
     margin-bottom: 10px;
+}
+
+/* Dropdown Styles */
+.dash-dropdown .Select-menu-outer {
+    max-height: 400px !important;
+    width: max-content !important;
+    min-width: 100% !important;
+    z-index: 1000;
+    background-color: white;
+}
+
+.dash-dropdown .Select-menu {
+    max-height: 398px !important;
+}
+
+.dash-dropdown .Select-option {
+    padding: 8px 10px;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.4;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+}
+
+.dash-dropdown .Select-value {
+    display: inline-flex !important;
+    align-items: center !important;
+    background-color: #e8e8e8 !important;
+    border-radius: 2px !important;
+    margin: 2px !important;
+    padding: 2px 8px !important;
+    max-width: calc(100% - 4px) !important;
+}
+
+.dash-dropdown .Select-value-label {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    line-height: 1.4 !important;
+    max-width: 100% !important;
+}
+
+.dash-dropdown .Select-control {
+    min-height: 38px;
+    height: auto !important;
+    padding: 2px !important;
+}
+
+.dash-dropdown .Select-multi-value-wrapper {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 2px !important;
+    padding: 2px !important;
+    max-height: 200px !important;
+    overflow-y: auto !important;
+}
+
+.dash-dropdown .Select-placeholder {
+    line-height: 38px !important;
+}
+
+/* Fix for dropdown options container */
+.VirtualizedSelectOption {
+    white-space: normal !important;
+    word-break: break-word !important;
+}
+
+/* Filter Grid Styles */
+.filter-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 24px;
+    margin: 24px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    width: 100%;
+}
+
+.filter-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #4A5568;
+    margin-bottom: 15px;
+    margin-top: 0;
+    display: block;
+}
+
+/* Slider container with proper spacing */
+.slider-container {
+    padding: 0 20px;
+    margin-bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Status checklist styling */
+.status-container {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.status-checklist {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+}
+
+.status-checklist label {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Dropdown container styling */
+.dash-dropdown {
+    width: 100% !important;
+}
+
+.dash-dropdown .Select-control {
+    min-height: 38px !important;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+}
+
+.dash-dropdown .Select-menu-outer {
+    width: auto !important;
+    min-width: 100% !important;
+    max-width: 150% !important;
+    z-index: 1000;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 4px;
+}
+
+.dash-dropdown .Select-option {
+    padding: 8px 12px;
+    white-space: normal !important;
+    word-break: break-word !important;
+    line-height: 1.4;
+}
+
+/* Range Slider Styles */
+.custom-range-slider {
+    margin: 0;
+    padding: 8px 0;
+    width: 100%;
+}
+
+.custom-range-slider .rc-slider-tooltip {
+    z-index: 999;
+}
+
+.custom-range-slider .rc-slider-tooltip-inner {
+    padding: 6px 8px;
+    min-width: 40px;
+    text-align: center;
+    background-color: #003660;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.custom-range-slider .rc-slider-tooltip-arrow {
+    border-top-color: #003660;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .filter-container {
+        padding: 16px;
+    }
+    
+    .status-checklist {
+        gap: 10px;
+    }
+    
+    .dash-dropdown .Select-menu-outer {
+        max-width: 100% !important;
+    }
 }
 

@@ -30,10 +30,11 @@ def create_boxplot_cost_chart(boxplot_cost_df):
         points="suspectedoutliers",
         labels={
             "arc2": "Recommendation Type",
-            "impcost_adj": "Implementation Cost",
+            "impcost_adj": "Implementation Cost ($)",
             "impstatus": "Implementation Status",
         },
         category_orders={"impstatus": ["I", "N", "P", "K"]},
+        template="plotly_white",
     )
 
     # update legend labels

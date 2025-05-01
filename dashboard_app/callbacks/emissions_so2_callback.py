@@ -1,12 +1,12 @@
 from dash import Input, Output
-from charts.boxplot_cost import create_boxplot_cost_chart
+from charts.boxplot_so2 import create_boxplot_so2_chart
 from components.filter_outliers import filter_outliers
 import pandas as pd
 
 
-def cost_boxplot_callback(app, boxplot_cost_df):
+def emissions_so2_callback(app, boxplot_so2_df):
     @app.callback(
-        Output("cost-boxplot", "figure"),
+        Output("so2-boxplot", "figure"),
         Input("sector-filter", "value"),
         Input("fy-filter", "value"),
         Input("impstatus-filter", "value"),
@@ -16,26 +16,26 @@ def cost_boxplot_callback(app, boxplot_cost_df):
     )
     def update_outputs(sector, fy_range, impstatus, arc2, state, remove_outliers):
         # create a mask for each filter
-        mask = pd.Series(True, index=boxplot_cost_df.index)
-        dummy_df = boxplot_cost_df[(boxplot_cost_df['state'] == 'TX') & (boxplot_cost_df['arc2'] == '2.7492')]
+        mask = pd.Series(True, index=boxplot_so2_df.index)
+        dummy_df = boxplot_so2_df[(boxplot_so2_df['state'] == 'TX') & (boxplot_so2_df['arc2'] == '2.7492')]
     
         if sector:
-            mask &= boxplot_cost_df["sector"].isin(sector)
+            mask &= boxplot_so2_df["sector"].isin(sector)
         if fy_range:  # Handling range slider correctly
             min_year, max_year = fy_range  # Unpack the range values
-            mask &= (boxplot_cost_df["fy"] >= min_year) & (boxplot_cost_df["fy"] <= max_year)
+            mask &= (boxplot_so2_df["fy"] >= min_year) & (boxplot_so2_df["fy"] <= max_year)
         if impstatus:
-            mask &= boxplot_cost_df["impstatus"].isin(impstatus)
+            mask &= boxplot_so2_df["impstatus"].isin(impstatus)
         if arc2:
-            mask &= boxplot_cost_df["arc2"].isin(arc2)
+            mask &= boxplot_so2_df["arc2"].isin(arc2)
         if state:
-            mask &= boxplot_cost_df["state"].isin(state)
+            mask &= boxplot_so2_df["state"].isin(state)
 
         # apply all filters at once
-        dff = boxplot_cost_df[mask]
+        dff = boxplot_so2_df[mask]
 
         if remove_outliers:
-            dff = filter_outliers(dff,"impcost_adj", std_threshold=2)
+            dff = filter_outliers(dff,"emissions_avoided", std_threshold=2)
 
         # [TEST - REMOVE BEFORE PROD] print filtered data info
         print(f"dummy: {dummy_df.head(30)}")
@@ -45,4 +45,4 @@ def cost_boxplot_callback(app, boxplot_cost_df):
         print(dff.head(30))
         
 
-        return create_boxplot_cost_chart(dff)
+        return create_boxplot_so2_chart(dff)
