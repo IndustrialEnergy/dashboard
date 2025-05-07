@@ -1,4 +1,4 @@
-# dashboard
+# Dashboard for the Industrial Energy Data Exploration Interface
 Web application for Industrial Energy Capstone Project
 
 ## Repository organization
@@ -114,3 +114,9 @@ The organization of the repo follows best practices:
 
 ## Contribution Guidelines
 *Outline the process to contribute to the project*
+
+## Authors
+
+Student Authors: Oksana Protsukha, Naommi Moraes, Yos Ramirez, Eva Newby.
+
+Capstone Advisor: Dr. Eric Masanet

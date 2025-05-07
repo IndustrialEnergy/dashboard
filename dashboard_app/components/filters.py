@@ -50,18 +50,35 @@ def create_filters(df):
                         width=3,
                         className="d-flex flex-column",
                     ),
+                     # Middle - Outlier Filter Slider
                     dbc.Col([
-                        dbc.Checkbox(
-                            id="outlier-filter",
-                            className="form-check-input",
-                            value=False,
+                        html.Label(
+                            "Outlier Threshold (σ):",
+                            className="filter-label",
                         ),
-                        dbc.Label(
-                            "Remove outliers (±2σ)",
-                            html_for="outlier-filter",
-                            className="form-check-label ms-2"
-                        )
-                    ], width=1),
+                        html.Div([
+                            dcc.Slider(
+                                id="outlier-filter",
+                                min = 0,
+                                max = 3,
+                                step = 0.1,
+                                marks = {
+                                    0: '0σ',
+                                    1: '1σ',
+                                    2: '2σ',
+                                    3: '3σ'
+                                },
+                                value = 2, # Have 2σ automatic outlier filtering
+                                tooltip={
+                                    "placement": "top", # Consistent with FY slider
+                                    "always_visible": True, # Consistent with FY slider
+                                },
+                                className="custom-slider",
+                            )
+                        ],
+                        className="slider-container"),
+                    ], width = 2),
+
                     # Right side - Implementation Status
                     dbc.Col(
                         [
@@ -220,3 +237,11 @@ def create_filters(df):
         ],
         className="filter-container",
     )
+
+def filter_outliers(df, column_name, std_threshold = 2):
+    if df.empty or column_name not in df.columns:
+        return df
+    mean = df[column_name].mean()
+    std = df[column_name].std()
+    return df[(df[column_name] >= mean - std_threshold*std) &
+              (df[column_name] <= mean + std_threshold*std)]
