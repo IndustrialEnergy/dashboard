@@ -17,16 +17,19 @@ RUN conda init bash
 SHELL ["/bin/bash", "-c"]
 
 # Make RUN commands use the new environment
-RUN echo "conda activate dcmonitor" >> ~/.bashrc
+RUN echo "conda activate industrialenergy" >> ~/.bashrc
 
 # Copy the entire application code into the container
 COPY . .
 
-# Expose the port that the app runs ondcmonitor
+# Expose the port that the app runs on
 EXPOSE 8051
+
+# Set PYTHONPATH environment variable
+ENV PYTHONPATH=/app
 
 # Set SHELL to bash with conda environment activated
 SHELL ["/bin/bash", "-c"]
 
 # Command to run the application with the conda environment activated
-CMD ["conda", "run", "--no-capture-output", "-n", "industrialenergy", "python", "-u", "src/server.py"]
+CMD ["conda", "run", "--no-capture-output", "-n", "industrialenergy", "python", "-u", "dashboard_app/server.py"]

@@ -78,6 +78,7 @@ def create_filters(df):
                         ],
                         className="slider-container"),
                     ], width = 2),
+
                     # Right side - Implementation Status
                     dbc.Col(
                         [
