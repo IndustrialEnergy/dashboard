@@ -1,0 +1,30 @@
+services:
+  # Data server service - serves raw data files
+  industrialenergy_data:
+    image: industrialenergy_data
+    container_name: industrialenergy_data_1
+    build: data/.
+    volumes:
+      - ./data:/app/data/
+    ports:
+      - 8080:8080 # 3010:8080
+    environment:
+      - TZ=America/Los_Angeles
+
+  # Dashboard application service - runs the Plotly Dash app
+  industrialenergy_dashboard:
+    image: industrialenergy_dashboard
+    container_name: industrialenergy_dashboard_1
+    build: .
+    volumes:
+      - ./data:/app/data/
+      - ./dashboard_app:/app/dashboard_app
+    ports:
+      - 8051:8051 # 3009:8051
+    environment:
+      - PYTHONPATH=/app
+      - DATA_SOURCE=local #-local or external for server
+      - DATA_SERVER_URL=http://localhost:8080/
+      - TZ=America/Los_Angeles
+    depends_on:
+      - "industrialenergy_data"
