@@ -423,6 +423,35 @@ body {
     border-top-color: #003660;
 }
 
+/* Slider Styles */
+.custom-slider {
+    margin: 0;
+    padding: 8px 0;
+    width: 100%;
+}
+
+.custom-slider .rc-slider-tooltip {
+    z-index: 999;
+}
+
+.custom-slider .rc-slider-tooltip-inner {
+    padding: 6px 8px;
+    min-width: 40px;
+    text-align: center;
+    background-color: #003660;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.custom-slider .rc-slider-tooltip-arrow {
+    border-top-color: #003660;
+}
+
+.custom-slider .rc-slider-track {
+    background-color: #003660;
+  }
+
 /* Responsive adjustments */
 @media (max-width: 992px) {
     .filter-container {
