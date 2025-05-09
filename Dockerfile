@@ -23,7 +23,7 @@ RUN echo "conda activate industrialenergy" >> ~/.bashrc
 COPY . .
 
 # Expose the port that the app runs on
-EXPOSE 8051
+EXPOSE 3009
 
 # Set PYTHONPATH environment variable
 ENV PYTHONPATH=/app
