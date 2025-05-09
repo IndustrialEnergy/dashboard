@@ -3,4 +3,4 @@
 # It sets the command to run http-server with CORS enabled on the ./app/data directory.
 FROM node:latest
 RUN npm install -g http-server
-CMD ["http-server", "./app/data", "--cors"]
+CMD ["http-server", "./app/data", "--cors", "-p", "3010"]  
