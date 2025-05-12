@@ -107,7 +107,7 @@ The organization of the repo follows best practices:
 Each module in this web application interacts with others to form the complete system.
 
 * **Dashboard Page:** The dashboard_page.py serves as the central page, calling various components, charts, and tables from the components, charts, and layouts directories. Data for these components is pulled from various sources (e.g., data/.xlsx., py scripts)
-* **Callbacks:** The callbacks module contains Python code that defines interactivity on the dashboard, such as filtering data or updating charts. These callback functions interact with the UI elements like buttons, charts, and tables. For example, the filter_panel.py triggers updates on charts and tables when users select new filters.
+* **Callbacks:** The callbacks module contains code that defines interactivity on the dashboard, such as filtering data or updating charts. These callback functions interact with the UI elements like buttons, charts, and tables. For example, the filter_panel.py triggers updates on charts and tables when users select new filters.
 * **Charts and Components:** Modules under the charts directory represent different types of visualizations, each of which receives data from the data folder and can be updated. Components like the navbar.py and footer.py are essential for the overall layout, providing a consistent user experience.
 * **Server:** The server.py file handles the setup of the application’s backend, configuring the server and handling requests to render different pages and serve dynamic content. It connects to the dashboard_page.py, about_page.py, and other page modules.
 * **Testing:** The test directory contains unit tests for different components and modules. Each module has corresponding tests, for example testing the functions in charts or verifying the interactivity of filter_panel.py. 
@@ -131,8 +131,8 @@ Consider tagging in Git for easy tracking of versions of the code and releases.
 ## Testing Strategy
 
 * **Unit Testing:** For individual components, functions, and methods covering typical use cases.
-* **Integration Testing:** Test how different modules interact. For example, test how the filter_panel.py interacts with various charts and tables.
-* **User Acceptance Testing (UAT):** Ensures the application meets the requirements set by stakeholders. This involves running tests on the entire dashboard to simulate real user interactions.
+* **Integration Testing:** To test how different modules interact. For example, test how the filter_panel.py interacts with various charts and tables.
+* **User Acceptance Testing (UAT):** Ensures the product meets the requirements set by stakeholders. This involves running tests on the entire dashboard to simulate real user interactions.
 
 ## Contribution Guidelines
 *Outline the process to contribute to the project*
