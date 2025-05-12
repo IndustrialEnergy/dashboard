@@ -130,7 +130,7 @@ Consider tagging in Git for easy tracking of versions of the code and releases.
 
 ## Testing Strategy
 
-* **Unit Testing:** For individual components, functions, and methods covering typical use cases and edge cases.
+* **Unit Testing:** For individual components, functions, and methods covering typical use cases.
 * **Integration Testing:** Test how different modules interact. For example, test how the filter_panel.py interacts with various charts and tables.
 * **User Acceptance Testing (UAT):** Ensures the application meets the requirements set by stakeholders. This involves running tests on the entire dashboard to simulate real user interactions.
 
