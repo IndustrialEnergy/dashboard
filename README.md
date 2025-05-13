@@ -123,10 +123,9 @@ Branching Strategy
 
 Merge Strategy
 
-* **Squash Merging:** Prefer using squash merging for cleaner commit history. It squashes all your commits in a branch into one before merging.
-* **Rebase vs. Merge:** Consider using rebase to keep your commit history linear, but be cautious when rebasing shared branches.
-
-Consider tagging in Git for easy tracking of versions of the code and releases. 
+* **Squash Merging:** Maintains a clean and readable commit history, this combines all commits from a feature branch into a single commit when merging into the main branch.
+* **Rebase:** Keeps the commit history linear and clean by applying changes on top of the latest main branch. Ideal for local or private branches, avoid with shared branches.  
+* **Tagging:** Whenever possible tag to mark versioned releases and key milestones. This makes it easier to track and reference specific versions of the code.
 
 ## Testing Strategy
 
