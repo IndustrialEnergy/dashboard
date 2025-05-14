@@ -107,25 +107,25 @@ The organization of the repo follows best practices:
 Each module in this web application interacts with others to form the complete system.
 
 * **Dashboard Page:** The dashboard_page.py serves as the central page, calling various components, charts, and tables from the components, charts, and layouts directories. Data for these components is pulled from various sources (e.g., data/.xlsx., python scripts)
-* **Callbacks:** The callbacks module contains code that defines interactivity on the dashboard, such as filtering data or updating charts. These callback functions interact with the UI elements like buttons, charts, and tables. For example, the filter_panel.py triggers updates on charts and tables when users select new filters.
-* **Charts and Components:** Modules under the charts directory represent different types of visualizations, each of which receives data from the data folder and can be updated. Components like the navbar.py and footer.py are essential for the overall layout, providing a consistent user experience.
-* **Server:** The server.py file handles the setup of the application’s backend, configuring the server and handling requests to render different pages and serve dynamic content. It connects to the dashboard_page.py, about_page.py, and other page modules.
-* **Testing:** The test directory contains unit tests for different components and modules. Each module has corresponding tests, for example testing the functions in charts or verifying the interactivity of filter_panel.py. 
+* **Callbacks:** The callbacks python script contains code that defines interactivity on the dashboard, such as filtering data or updating charts. These callback functions interact with the UI elements like buttons, charts, and tables. For example, the filter_panel.py triggers updates on charts and tables when users select new filters.
+* **Charts and Components:** Scripts under the charts directory represent different types of visualizations, each of which receives data from the data folder and can be updated. Components like the navbar.py and footer.py are essential for the overall layout, providing a consistent user experience.
+* **Server:** The server.py file handles the setup of the application’s backend, configuring the server and handling requests to render different pages and serve dynamic content. It connects to the dashboard_page.py, about_page.py, and other pages.
+* **Testing:** The test directory contains unit tests for different components. Each component has corresponding tests, for example testing the functions in charts or verifying the interactivity of filter_panel.py. 
 
 ## Version Control Practices
 
 Branching Strategy
 
 * **Main Branch:** The main or master branch should always be stable and ready for production. No direct commits should be made to this branch.
-* **Development Branch:** This is where ongoing work is done and merged into after testing. Create feature branches from develop for new work.
-* **Feature Branches:** Each feature or bug fix should be developed in a separate branch. Once the feature is complete and tested, it can be merged into the develop branch.
-* **Release Branches:** Once features are merged, a release branch can be created to prepare for production deployment.
+* **Development Branch:** This is where ongoing work is done and merged into after testing. Create feature branches from development for new work.
+* **Feature Branches:** Each feature or bug fix should be developed in a separate branch. Once the feature is complete and tested, it can be merged into the development branch.
+* **Release Branches:** Once feature branches are merged, a release branch can be created to prepare for production deployment.
 
 Merge Strategy
 
-* **Squash Merging:** Maintains a clean and readable commit history, this combines all commits from a feature branch into a single commit when merging into the main branch.
-* **Rebase:** Keeps the commit history linear and clean by applying changes on top of the latest main branch. Ideal for local or private branches, avoid with shared branches.  
-* **Tagging:** Whenever possible tag to mark versioned releases and key milestones. This makes it easier to track and reference specific versions of the code.
+* **Squash Merging:** Maintains a clean and readable commit history, this combines all commits from a feature branch into a single commit when merging into the development or main branch.
+* **Rebase:** Keeps the commit history linear and clean by applying changes on top of the latest main branch. Ideal for local or private branches, avoid with shared branches.
+* **Tagging:** Whenever possible tag to mark version releases and key milestones. This makes it easier to track and reference specific versions of the code.
 
 ## Testing Strategy
 
