@@ -53,7 +53,7 @@ def create_filters(df):
                      # Middle - Outlier Filter Slider
                     dbc.Col([
                         html.Label(
-                            "Outlier Threshold (σ):",
+                            "Outlier Exclusion Threshold (σ):",
                             className="filter-label",
                         ),
                         html.Div([
