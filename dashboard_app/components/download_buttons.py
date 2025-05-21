@@ -6,7 +6,6 @@ import os
 import tempfile
 
 def get_data_from_zip():
-    """Fetch and extract data from the IAC Database zip file."""
     url = "https://iac.university/storage/IAC_Database.zip"
     
     try:
@@ -23,11 +22,10 @@ def get_data_from_zip():
             with zipfile.ZipFile(zip_path) as z:
                 file_list = z.namelist()
                 
-                # Look for Excel or CSV files
+                # Look for Excel files
                 data_files = [f for f in file_list if f.endswith(('.xlsx', '.xls', '.csv'))]
                 
                 if data_files:
-                    # Use the first file found
                     data_file = data_files[0]
                     z.extract(data_file, temp_dir)
                     
@@ -41,5 +39,5 @@ def get_data_from_zip():
     except Exception:
         pass
     
-    # Return empty DataFrame if any error occurred
+    # Return empty DataFrame if errored out
     return pd.DataFrame()
