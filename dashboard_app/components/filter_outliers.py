@@ -1,3 +1,5 @@
+from dash import html
+
 def filter_outliers(df, column_name, std_threshold = 2):
     if df.empty or column_name not in df.columns:
         return df
