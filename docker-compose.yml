@@ -10,12 +10,30 @@ services:
     environment:
       - TZ=America/Los_Angeles
 
+  # Data-pipeline service - runs the scripts to generate an integrated dataset
+  industrialenergy_datapipeline:
+    image: industrialenergy_datapipeline
+    build:
+      context: .
+      dockerfile: Dockerfile.pipeline
+    volumes:
+      - ./tools/data_pipeline:/app/tools/data_pipeline
+      - ./data:/app/data/ 
+    environment:
+      - PYTHONPATH=/app
+      - DATA_SOURCE=${DATA_SOURCE:-local} # Default to "local" if the variable is not set in .en
+      - DATA_SERVER_URL=http://industrialenergy_data:3010/  # URL of the container that serves data files
+      - TZ=America/Los_Angeles
+    depends_on:
+      - "industrialenergy_data"
+
   # Dashboard application service - runs the Plotly Dash app
   industrialenergy_dashboard:
     image: industrialenergy_dashboard
     build: .
     volumes:
       - ./data:/app/data/
+      - ./tools/data_pipeline:/app/tools/data_pipeline
       - ./dashboard_app:/app/dashboard_app
     ports:
       - 3009:3009  # Map port 3009 on the host to port 3009 in the container
