@@ -28,7 +28,11 @@ from dashboard_app.callbacks.emissions_so2_callback import emissions_so2_callbac
 from dashboard_app.callbacks.emissions_nox_callback import emissions_nox_callback
 from dashboard_app.callbacks.electricity_boxplot_callback import emissions_electricity_callback
 from dashboard_app.callbacks.fuels_boxplot_callback import emissions_fuels_callback
+from dashboard_app.callbacks.download_buttons_callback import download_csv
+from dashboard_app.callbacks.download_buttons_callback import download_excel
 
+# Import components for download callback
+from dashboard_app.components.download_buttons import get_data_from_zip
 
 def create_app():
     # get absolute path to assets folder
@@ -86,6 +90,8 @@ def create_app():
     emissions_electricity_callback(app, boxplot_electricity_df)
     emissions_fuels_callback(app, boxplot_fuels_df)
     arc_filter_limit_callback(app)
+    download_excel(app, get_data_from_zip)
+    download_csv(app)
 
     # URL routing
     app.layout = html.Div(
