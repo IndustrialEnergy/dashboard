@@ -1,0 +1,42 @@
+# FROM continuumio/miniconda3
+
+# WORKDIR /app
+
+# COPY environment.yml .
+# RUN conda env create -f environment.yml
+
+# SHELL ["/bin/bash", "-c"]
+# RUN echo "conda activate industrialenergy" >> ~/.bashrc
+
+# # COPY tools/data_pipeline/ tools/data_pipeline/
+
+# # RUN chmod +x tools/data_pipeline/run_pipeline.sh
+
+# COPY tools/data_pipeline/run_pipeline.sh /app/tools/data_pipeline/
+# RUN chmod +x /app/tools/data_pipeline/run_pipeline.sh
+
+# CMD ["conda", "run", "--no-capture-output", "-n", "industrialenergy", "/app/tools/data_pipeline/run_pipeline.sh"]
+
+FROM continuumio/miniconda3
+
+WORKDIR /app
+
+# Copy and install dependencies
+COPY environment.yml .
+RUN conda env create -f environment.yml
+
+# Copy only the tools (data comes from volume mount)
+COPY tools/ /app/tools/
+
+# Make scripts executable
+RUN chmod +x /app/tools/data_pipeline/*.sh
+
+# Activate conda environment by default
+ENV PATH /opt/conda/envs/industrialenergy/bin:$PATH
+ENV CONDA_DEFAULT_ENV industrialenergy
+
+# Set working directory to where scripts expect to run from
+WORKDIR /app/tools/data_pipeline
+
+# Run the pipeline script directly
+CMD ["/bin/bash", "./run_pipeline.sh"]
