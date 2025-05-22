@@ -49,6 +49,7 @@ fuel_emission_factors_df = pd.read_csv(absolute_path/'fuel_emission_factors.csv'
 ppi_df = pd.read_csv(absolute_path/'ppi.csv')
 arc_df = pd.read_csv(absolute_path/'arc_descriptions.csv')
 naics_df = pd.read_csv(absolute_path/'sic_to_naics.csv')
+naics_xwalk_df = pd.read_csv(absolute_path/'NAICS_SIC_Xwalk.csv')
 
 
 # -------  calculate & integrate emissions ------- #
@@ -145,18 +146,55 @@ integrated_df = pd.merge(integrated_df, arc_df,
 
 # -------  integrate NAICS and SIC descriptions ------- #
 
+# remove trailing “.0” or any decimal from sic values
+integrated_df['sic'] = integrated_df['sic'].astype(str)
+integrated_df['sic'] = integrated_df['sic'].str.replace(r'\.0+$', '', regex=True)
 
+
+# create a lookup table for NAICS descriptions
+naics_code_lookup = dict(zip(
+    naics_df['SIC'],
+    naics_df['2002 NAICS'].astype(str)
+))
+
+naics_2002_desc_lookup = dict(zip(
+    naics_df['2002 NAICS'].astype(str),
+    naics_df['2002 NAICS Title']
+))
+
+naics_title_lookup = dict(zip(
+    naics_xwalk_df['2022 NAICS Code'].astype(str),
+    naics_xwalk_df['2022 NAICS Title']
+))
+
+# add naics_imputed column to integrated_df
+integrated_df['naics_imputed'] = integrated_df['naics'].fillna(
+    integrated_df['sic'].astype(str).map(naics_code_lookup)  
+)
+
+integrated_df['naics_description'] = integrated_df['naics_imputed'].astype(str).map(naics_title_lookup)  
+
+integrated_df['naics_description'] = integrated_df['naics_description'].fillna(
+    integrated_df['naics_imputed'].astype(str).map(naics_2002_desc_lookup)) 
 
 # -------  Integrated dataset: Validate ------- #
 
-# print(iac_df['arc2'].dtype)
-# #print(iac_df[~iac_df['arc2'].str.startswith('2')])
-# print(iac_df['sourccode'].unique())
-# #print(iac_df['arc2'].unique())
-print(integrated_df[integrated_df['superid']=='AM007902'])
-print(integrated_df[integrated_df['superid']=='AM007903'])
-print(integrated_df[integrated_df['id']=='AM0079'])
+# # print(iac_df['arc2'].dtype)
+# # #print(iac_df[~iac_df['arc2'].str.startswith('2')])
+# # print(iac_df['sourccode'].unique())
+# # #print(iac_df['arc2'].unique())
+# print(integrated_df[integrated_df['superid']=='AM007902'])
+# print(integrated_df[integrated_df['superid']=='AM007903'])
+# print(integrated_df[integrated_df['id']=='AM0079'])
 
+# print(integrated_df[
+#     integrated_df['naics'].isna() & (integrated_df['naics_imputed'] != '')
+# ][['id', 'sic', 'naics', 'naics_imputed', 'naics_description']].head(10))
+
+# missing_naics = integrated_df[integrated_df['naics_imputed'].isna()][['id','sic', 'naics','naics_imputed']]
+
+# # missing_naics = integrated_df[integrated_df['naics'].isna()][['id','sic', 'naics']]
+# print(len(missing_naics['id'].unique())) ## expect 202 audits with missing naics
 
 #------------------------ Save data to CSV ------------------------#
 
