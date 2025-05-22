@@ -18,8 +18,8 @@ def payback_boxplot_callback(app, boxplot_payback_df):
 
         if sector:
             mask &= boxplot_payback_df["sector"].isin(sector)
-        if fy:
-            mask &= boxplot_payback_df["fy"].isin(fy)
+        if fy and len(fy) == 2:
+            mask &= boxplot_payback_df["fy"].between(fy[0], fy[1])
         if impstatus:
             mask &= boxplot_payback_df["impstatus"].isin(impstatus)
         if arc2:
