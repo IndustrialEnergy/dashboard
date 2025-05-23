@@ -30,7 +30,7 @@ def create_boxplot_fuels_chart(boxplot_fuels_df):
         points="suspectedoutliers",
         labels={
             "arc2": "Recommendation Type",
-            "conserved": "Fuel saved (MMBtu)",
+            "conserved": "Fuel saved (MMBtu per year)",
             "impstatus": "Status",
         },
         category_orders={"impstatus": ["I", "N", "P", "K"]},

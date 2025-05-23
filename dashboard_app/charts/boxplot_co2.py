@@ -43,7 +43,7 @@ def create_boxplot_co2_chart(boxplot_co2_df):
         points="suspectedoutliers",
         labels={
             "arc2": "Recommendation Type",
-            "emissions_avoided": "Emissions Avoided (kg)",
+            "emissions_avoided": "Emissions Avoided (kg per year)",
             "impstatus": "Status",
         },
         category_orders={"impstatus": ["I", "N", "P", "K"]},

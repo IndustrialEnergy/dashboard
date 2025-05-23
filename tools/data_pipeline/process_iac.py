@@ -222,6 +222,8 @@ print(iac_df['sourccode'].unique())
 
 # Calculate payback period
 iac_df['payback_imputed'] = iac_df['payback'].combine_first(iac_df['impcost'] / iac_df['saved'])
+iac_df['payback_imputed'] = pd.to_numeric(iac_df['payback_imputed'], errors='coerce')
+iac_df['emissions_avoided'] = iac_df['emissions_avoided'].round(4)
 #------------------------ Save data to CSV ------------------------#
 
 # Save the cleaned data to a CSV file

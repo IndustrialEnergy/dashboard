@@ -1,17 +1,5 @@
-# import plotly.express as px
-# import plotly.graph_objects as go
-# import traceback
-# import pandas as pd
-
-# def create_boxplot_electricity_chart(boxplot_electricity_df):
-#     return px.box(boxplot_electricity_df, 
-#                   x="impstatus", 
-#                   y="conserved", 
-#                   color="impstatus",
-#                   points="all")
-
 import plotly.express as px
-import plotly.graph_objects as go
+#import plotly.graph_objects as go
 import traceback
 import pandas as pd
 
@@ -42,7 +30,7 @@ def create_boxplot_electricity_chart(boxplot_electricity_df):
         points="suspectedoutliers",
         labels={
             "arc2": "Recommendation Type",
-            "conserved": "Electricity saved (kWh)",
+            "conserved": "Electricity saved (kWh per year)",
             "impstatus": "Status",
         },
         category_orders={"impstatus": ["I", "N", "P", "K"]},

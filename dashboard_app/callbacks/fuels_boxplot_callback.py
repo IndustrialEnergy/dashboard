@@ -4,7 +4,7 @@ from components.filter_outliers import filter_outliers
 import pandas as pd
 
 
-def emissions_fuels_callback(app, boxplot_fuels_df):
+def other_fuels_callback(app, boxplot_fuels_df):
     @app.callback(
         Output("other-fuels-boxplot", "figure"),
         Input("sector-filter", "value"),
@@ -14,13 +14,13 @@ def emissions_fuels_callback(app, boxplot_fuels_df):
         Input("state-filter", "value"),
         Input("outlier-filter", "value")
     )
-    def update_outputs(sector, fy_range, impstatus, arc2, state, remove_outliers):
+    def update_outputs(naics_imputed, fy_range, impstatus, arc2, state, remove_outliers):
         # create a mask for each filter
         mask = pd.Series(True, index=boxplot_fuels_df.index)
         dummy_df = boxplot_fuels_df[(boxplot_fuels_df['state'] == 'TX') & (boxplot_fuels_df['arc2'] == '2.7492')]
     
-        if sector:
-            mask &= boxplot_fuels_df["sector"].isin(sector)
+        if naics_imputed:
+            mask &= boxplot_fuels_df["naics_imputed"].isin(naics_imputed)
         if fy_range:  # Handling range slider correctly
             min_year, max_year = fy_range  # Unpack the range values
             mask &= (boxplot_fuels_df["fy"] >= min_year) & (boxplot_fuels_df["fy"] <= max_year)

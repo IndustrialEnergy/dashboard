@@ -7,32 +7,49 @@ import pandas as pd
 # - Uses integer codes to reference these values
 # - Maintains the exact same data, just in a more memory-efficient format
 
+
 def load_integrated_dataset():
     current_dir = Path(__file__).parent
-    data_path = current_dir.parent / "data" / "iac_integrated_dash.csv"
+    data_path = current_dir.parent / "data" / "final" / "iac_integrated.csv"
 
     # load data with optimized dtypes for improved performance
     integrated_df = pd.read_csv(
         data_path,
         dtype={
-            "fy": "int16",
-            "sector": "category", 
+            "fy": "Int16",
+            "reference_year": "Int64",
+            "base_year": "Int64",
+            "naics_description": "category",
+            "naics_imputed": "category",
             "state": "category",
             "arc2": "category",
-            "arc_description": "category",
+            "specific_description": "category",
             "impcost_adj": "float32",
             "payback": "float32",
         },
     )
 
     # convert string columns that have < 100 unique values to categorical for improved performance
-    skip_cols = ["sector", "state", "arc2", "arc_description", "impstatus", "emission_type", "sourccode"]
+    skip_cols = [
+        "naics_description",
+        "naics_imputed",
+        "state",
+        "arc2",
+        "specific_description",
+        "impstatus",
+        "emission_type",
+        "sourccode",
+    ]
     categorical_threshold = 100
 
     for col in integrated_df.select_dtypes(include=["object"]).columns:
-        if col not in skip_cols and integrated_df[col].nunique() < categorical_threshold:
+        if (
+            col not in skip_cols
+            and integrated_df[col].nunique() < categorical_threshold
+        ):
             integrated_df[col] = integrated_df[col].astype("category")
 
     return integrated_df
+
 
 ## put in url data_server that points to bren port: 3009 (data) and port: 3010 (client)

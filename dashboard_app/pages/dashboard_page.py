@@ -8,8 +8,8 @@ from components.filters import create_filters
 
 
 def create_dashboard_page(
-    filters_df,
-):  # (integrated_df, boxplot_cost_df, boxplot_payback_df):
+    filters_df, reference_year
+):  
     content = html.Div(
         [
             dbc.Row(
@@ -58,7 +58,7 @@ def create_dashboard_page(
                                     dbc.Card(
                                         [
                                             dbc.CardHeader(
-                                                "Electricity Savings Distribution"
+                                                "Annual Electricity Savings Distribution"
                                             ),
                                             dbc.CardBody(
                                                 [
@@ -73,14 +73,36 @@ def create_dashboard_page(
                                         ]
                                     )
                                 ],
-                                width=6,
+                                width=4,
                             ),
                             dbc.Col(
                                 [
                                     dbc.Card(
                                         [
                                             dbc.CardHeader(
-                                                "Other Fuels Savings Distribution"
+                                                "Annual Natural Gas Savings Distribution"
+                                            ),
+                                            dbc.CardBody(
+                                                [
+                                                    html.Div(
+                                                        dcc.Graph(
+                                                            id="natural-gas-boxplot"
+                                                        ),
+                                                        className="chart-container",
+                                                    )
+                                                ]
+                                            ),
+                                        ]
+                                    )
+                                ],
+                                width=4,
+                            ),
+                            dbc.Col(
+                                [
+                                    dbc.Card(
+                                        [
+                                            dbc.CardHeader(
+                                                "Annual Other Fuels Savings Distribution"
                                             ),
                                             dbc.CardBody(
                                                 [
@@ -95,7 +117,7 @@ def create_dashboard_page(
                                         ]
                                     )
                                 ],
-                                width=6,
+                                width=4,
                             ),
                         ]
                     ),
@@ -111,13 +133,13 @@ def create_dashboard_page(
                         ]
                     ),
                     dbc.Row(
-                        [
+                        [ 
                             dbc.Col(
                                 [
                                     dbc.Card(
                                         [
                                             dbc.CardHeader(
-                                                "Implementation Cost Distribution (Current Year PPI-Adjusted)"
+                                                f"Implementation Cost Distribution ({reference_year} Year PPI-Adjusted)"
                                             ),
                                             dbc.CardBody(
                                                 [
@@ -136,7 +158,7 @@ def create_dashboard_page(
                                 [
                                     dbc.Card(
                                         [
-                                            dbc.CardHeader("Payback Distribution"),
+                                            dbc.CardHeader("Payback Period Distribution"),
                                             dbc.CardBody(
                                                 [
                                                     html.Div(
@@ -170,7 +192,7 @@ def create_dashboard_page(
                                 [
                                     dbc.Card(
                                         [
-                                            dbc.CardHeader("Reduction in CO2"),
+                                            dbc.CardHeader("Annual Reduction in CO2"),
                                             dbc.CardBody(
                                                 [
                                                     html.Div(
@@ -188,7 +210,7 @@ def create_dashboard_page(
                                 [
                                     dbc.Card(
                                         [
-                                            dbc.CardHeader("Reduction in SO2"),
+                                            dbc.CardHeader("Annual Reduction in SO2"),
                                             dbc.CardBody(
                                                 [
                                                     html.Div(
@@ -206,7 +228,7 @@ def create_dashboard_page(
                                 [
                                     dbc.Card(
                                         [
-                                            dbc.CardHeader("Reduction in NOx"),
+                                            dbc.CardHeader("Annual Reduction in NOx"),
                                             dbc.CardBody(
                                                 [
                                                     html.Div(

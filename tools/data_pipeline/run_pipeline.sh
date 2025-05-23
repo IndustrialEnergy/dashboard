@@ -65,7 +65,7 @@ archive_files() {
             ext="${filename##*.}"
             archived_name="${name}_${TIMESTAMP}.${ext}"
 
-            if cp "$file" "${ARCHIVE_DIR}/${archived_name}"; then
+            if mv "$file" "${ARCHIVE_DIR}/${archived_name}"; then
                 log_message "Archived: ${filename} as ${archived_name}"
             else
                 log_message "ERROR: Failed to archive ${filename}"
