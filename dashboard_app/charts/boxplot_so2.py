@@ -1,5 +1,5 @@
 import plotly.express as px
-import plotly.graph_objects as go
+#import plotly.graph_objects as go
 import traceback
 import pandas as pd
 
@@ -30,7 +30,7 @@ def create_boxplot_so2_chart(boxplot_so2_df):
         points="suspectedoutliers",
         labels={
             "arc2": "Recommendation Type",
-            "emissions_avoided": "Emissions Avoided (kg)",
+            "emissions_avoided": "Emissions Avoided (kg per year)",
             "impstatus": "Status",
         },
         category_orders={"impstatus": ["I", "N", "P", "K"]},

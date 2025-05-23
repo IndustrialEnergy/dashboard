@@ -12,12 +12,12 @@ def payback_boxplot_callback(app, boxplot_payback_df):
         Input("arc-filter", "value"),
         Input("state-filter", "value"),
     )
-    def update_outputs(sector, fy, impstatus, arc2, state):
+    def update_outputs(naics_imputed, fy, impstatus, arc2, state):
         # create a mask for each filter
         mask = pd.Series(True, index=boxplot_payback_df.index)
 
-        if sector:
-            mask &= boxplot_payback_df["sector"].isin(sector)
+        if naics_imputed:
+            mask &= boxplot_payback_df["naics_imputed"].isin(naics_imputed)
         if fy and len(fy) == 2:
             mask &= boxplot_payback_df["fy"].between(fy[0], fy[1])
         if impstatus:
