@@ -139,7 +139,8 @@ integrated_df['impcost_adj'] = integrated_df['impcost'] * (integrated_df['refere
 integrated_df['impcost_adj'] = pd.to_numeric(integrated_df['impcost_adj'], errors='coerce')
 integrated_df['impcost_adj'] = integrated_df['impcost_adj'].round(2)
 
-integrated_df['reference_year'] = pd.to_numeric(integrated_df['reference_year'], errors='coerce').astype('Int16')
+
+integrated_df['reference_year'] = pd.to_numeric(integrated_df['reference_year'], errors='coerce').astype('Int64')
 
 # -------  integrate ARC descriptions ------- #
 integrated_df = pd.merge(integrated_df, arc_df,
@@ -150,6 +151,7 @@ integrated_df = pd.merge(integrated_df, arc_df,
 
 
 # -------  integrate NAICS and SIC descriptions ------- #
+
 # def clean_naics(value):
 #     if pd.isna(value):
 #         # Return NaN values as is
@@ -207,12 +209,16 @@ naics_title_lookup = dict(zip(
 ))
 
 # add naics_imputed column to integrated_df
+
 # impute NAICS codes based on SIC codes where NAICS is missing
+
 integrated_df['naics_imputed'] = integrated_df['naics'].fillna(
     integrated_df['sic'].astype(str).map(naics_code_lookup)  
 )
 
+
 # update naics descriptions based on NAICS codes
+
 integrated_df['naics_description'] = integrated_df['naics_imputed'].astype(str).map(naics_title_lookup)  
 
 integrated_df['naics_description'] = integrated_df['naics_description'].fillna(
