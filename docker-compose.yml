@@ -6,7 +6,7 @@ services:
     volumes:
       - ./data:/app/data/
     ports:
-      - 3010:3010 # Map port 3010 on the host to port 3010 in the container
+      - 3010:3010
     environment:
       - TZ=America/Los_Angeles
 
@@ -21,8 +21,7 @@ services:
       - ./data:/app/data/ 
     environment:
       - PYTHONPATH=/app
-      - DATA_SOURCE=${DATA_SOURCE:-local} # Default to "local" if the variable is not set in .en
-      - DATA_SERVER_URL=http://industrialenergy_data:3010/  # URL of the container that serves data files
+      - DATA_SERVER_URL=http://industrialenergy_data:3010/
       - TZ=America/Los_Angeles
     depends_on:
       - "industrialenergy_data"
@@ -36,11 +35,12 @@ services:
       - ./tools/data_pipeline:/app/tools/data_pipeline
       - ./dashboard_app:/app/dashboard_app
     ports:
-      - 3009:3009  # Map port 3009 on the host to port 3009 in the container
+      - 3009:3009
     environment:
       - PYTHONPATH=/app
-      - DATA_SOURCE=${DATA_SOURCE:-local} # Default to "local" if the variable is not set in .en
       - DATA_SERVER_URL=http://industrialenergy_data:3010/  # URL of the container that serves data files
       - TZ=America/Los_Angeles
+      - DASH_BASE_PATHNAME=${DASH_BASE_PATHNAME:-/}
+      - DATA_DIR=${DATA_DIR:-/app/data/final}
     depends_on:
       - "industrialenergy_data"
