@@ -139,7 +139,7 @@ integrated_df['impcost_adj'] = integrated_df['impcost'] * (integrated_df['refere
 integrated_df['impcost_adj'] = pd.to_numeric(integrated_df['impcost_adj'], errors='coerce')
 integrated_df['impcost_adj'] = integrated_df['impcost_adj'].round(2)
 
-integrated_df['reference_year'] = pd.to_numeric(integrated_df['reference_year'], errors='coerce').astype('Int16')
+integrated_df['reference_year'] = pd.to_numeric(integrated_df['reference_year'], errors='coerce').astype('Int64')
 
 # -------  integrate ARC descriptions ------- #
 integrated_df = pd.merge(integrated_df, arc_df,
