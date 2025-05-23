@@ -1,9 +1,9 @@
 import warnings
+import os
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
-import os
 import dash
 from dash import Dash, dcc, html, Input, Output, callback
 from dash.dependencies import Input, Output, State
@@ -35,11 +35,12 @@ from dashboard_app.callbacks.download_buttons_callback import download_excel
 # Import components for download callback
 from dashboard_app.components.download_buttons import get_data_from_zip
 
+
 def create_app():
-    # get absolute path to assets folder
-    assets_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "assets")
-    )
+    # get absolute path to assets folder - now inside dashboard_app
+    assets_path = os.path.join(os.path.dirname(__file__), "assets")
+
+    print(f"Assets path: {assets_path}")  # Debug print
 
     app = Dash(
         __name__,
@@ -49,8 +50,9 @@ def create_app():
             "https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500&family=Inter:wght@400;500&display=swap",
         ],
         suppress_callback_exceptions=True,
-        assets_folder=assets_path,  # set absolute path to assets
-        assets_url_path="assets",  # explicitly set the assets URL path
+        assets_folder=assets_path,
+        assets_url_path="/assets",  # keep the leading slash
+        serve_locally=True,
     )
 
     # load data
@@ -59,31 +61,114 @@ def create_app():
     print(integrated_df.info())
 
     filters_df = integrated_df[
-        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "reference_year"]
+        [
+            "fy",
+            "naics_description",
+            "naics_imputed",
+            "state",
+            "arc2",
+            "specific_description",
+            "impstatus",
+            "reference_year",
+        ]
     ]
     boxplot_cost_df = integrated_df[
-        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "impcost_adj"]
+        [
+            "fy",
+            "naics_description",
+            "naics_imputed",
+            "state",
+            "arc2",
+            "specific_description",
+            "impstatus",
+            "impcost_adj",
+        ]
     ]
     boxplot_payback_df = integrated_df[
-        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "payback"]
+        [
+            "fy",
+            "naics_description",
+            "naics_imputed",
+            "state",
+            "arc2",
+            "specific_description",
+            "impstatus",
+            "payback",
+        ]
     ]
-    boxplot_co2_df = integrated_df[integrated_df['emission_type'] == "CO2"][
-        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "emissions_avoided"]
+    boxplot_co2_df = integrated_df[integrated_df["emission_type"] == "CO2"][
+        [
+            "fy",
+            "naics_description",
+            "naics_imputed",
+            "state",
+            "arc2",
+            "specific_description",
+            "impstatus",
+            "emissions_avoided",
+        ]
     ]
-    boxplot_nox_df = integrated_df[integrated_df['emission_type'] == "NOx"][
-        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "emissions_avoided"]
+    boxplot_nox_df = integrated_df[integrated_df["emission_type"] == "NOx"][
+        [
+            "fy",
+            "naics_description",
+            "naics_imputed",
+            "state",
+            "arc2",
+            "specific_description",
+            "impstatus",
+            "emissions_avoided",
+        ]
     ]
-    boxplot_so2_df = integrated_df[integrated_df['emission_type'] == "SO2"][
-        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "emissions_avoided"]
+    boxplot_so2_df = integrated_df[integrated_df["emission_type"] == "SO2"][
+        [
+            "fy",
+            "naics_description",
+            "naics_imputed",
+            "state",
+            "arc2",
+            "specific_description",
+            "impstatus",
+            "emissions_avoided",
+        ]
     ]
-    boxplot_electricity_df = integrated_df[integrated_df['sourccode'].isin(["EC"])][
-        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "conserved"]
+    boxplot_electricity_df = integrated_df[integrated_df["sourccode"].isin(["EC"])][
+        [
+            "fy",
+            "naics_description",
+            "naics_imputed",
+            "state",
+            "arc2",
+            "specific_description",
+            "impstatus",
+            "conserved",
+        ]
     ]
-    boxplot_natural_gas_df = integrated_df[integrated_df['sourccode'].isin(["E2"])][
-    ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "conserved"]
+    boxplot_natural_gas_df = integrated_df[integrated_df["sourccode"].isin(["E2"])][
+        [
+            "fy",
+            "naics_description",
+            "naics_imputed",
+            "state",
+            "arc2",
+            "specific_description",
+            "impstatus",
+            "conserved",
+        ]
     ]
-    boxplot_fuels_df = integrated_df[~integrated_df['sourccode'].isin(["EC", "ED", "EF"])][
-        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "conserved"]
+    boxplot_fuels_df = integrated_df[
+        ~integrated_df["sourccode"].isin(["EC", "ED", "EF"])
+    ][
+        [
+            "fy",
+            "naics_description",
+            "naics_imputed",
+            "state",
+            "arc2",
+            "specific_description",
+            "impstatus",
+            "conserved",
+        ]
     ]
     # initialize callbacks
     cost_boxplot_callback(app, boxplot_cost_df)
@@ -113,7 +198,7 @@ def create_app():
         elif pathname == "/dashboard":
             return create_dashboard_page(
                 filters_df, reference_year=integrated_df["reference_year"].max()
-            ) 
+            )
         elif pathname == "/documentation":
             return create_docs_page()
         elif pathname == "/data":
