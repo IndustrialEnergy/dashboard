@@ -4,7 +4,7 @@ from components.filter_outliers import filter_outliers
 import pandas as pd
 
 
-def emissions_electricity_callback(app, boxplot_electricity_df):
+def electricity_callback(app, boxplot_electricity_df):
     @app.callback(
         Output("electricity-boxplot", "figure"),
         Input("sector-filter", "value"),
@@ -14,13 +14,13 @@ def emissions_electricity_callback(app, boxplot_electricity_df):
         Input("state-filter", "value"),
         Input("outlier-filter", "value")
     )
-    def update_outputs(sector, fy_range, impstatus, arc2, state, remove_outliers):
+    def update_outputs(naics_imputed, fy_range, impstatus, arc2, state, remove_outliers):
         # create a mask for each filter
         mask = pd.Series(True, index=boxplot_electricity_df.index)
         dummy_df = boxplot_electricity_df[(boxplot_electricity_df['state'] == 'TX') & (boxplot_electricity_df['arc2'] == '2.7492')]
     
-        if sector:
-            mask &= boxplot_electricity_df["sector"].isin(sector)
+        if naics_imputed:
+            mask &= boxplot_electricity_df["naics_imputed"].isin(naics_imputed)
         if fy_range:  # Handling range slider correctly
             min_year, max_year = fy_range  # Unpack the range values
             mask &= (boxplot_electricity_df["fy"] >= min_year) & (boxplot_electricity_df["fy"] <= max_year)

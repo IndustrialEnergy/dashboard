@@ -43,13 +43,16 @@ required_files = [
 check_required_files(absolute_path, required_files)
 
 # Only proceed with reading files if all exist
-iac_df = pd.read_csv(absolute_path/'iac.csv')
+iac_df = pd.read_csv(absolute_path/'iac.csv', dtype={'sic': str, 'naics': str, 'payback_imputed': float})
 ec_emission_factors_df = pd.read_csv(absolute_path/'ec_emission_factors.csv')
 fuel_emission_factors_df = pd.read_csv(absolute_path/'fuel_emission_factors.csv')
 ppi_df = pd.read_csv(absolute_path/'ppi.csv')
+
+# Static data files
 arc_df = pd.read_csv(absolute_path/'arc_descriptions.csv')
-naics_df = pd.read_csv(absolute_path/'sic_to_naics.csv')
-naics_xwalk_df = pd.read_csv(absolute_path/'NAICS_SIC_Xwalk.csv')
+naics_df = pd.read_csv(absolute_path/'sic_to_naics.csv', dtype={'SIC': str, '2002 NAICS': str})
+# Clean column names
+naics_xwalk_df = pd.read_csv(absolute_path/'NAICS_SIC_Xwalk.csv', dtype={'2022 NAICS Code': str, 'Related SIC Code': str})
 
 
 # -------  calculate & integrate emissions ------- #
@@ -136,6 +139,9 @@ integrated_df['impcost_adj'] = integrated_df['impcost'] * (integrated_df['refere
 integrated_df['impcost_adj'] = pd.to_numeric(integrated_df['impcost_adj'], errors='coerce')
 integrated_df['impcost_adj'] = integrated_df['impcost_adj'].round(2)
 
+
+integrated_df['reference_year'] = pd.to_numeric(integrated_df['reference_year'], errors='coerce').astype('Int64')
+
 # -------  integrate ARC descriptions ------- #
 integrated_df = pd.merge(integrated_df, arc_df,
                          left_on='arc2',
@@ -145,6 +151,41 @@ integrated_df = pd.merge(integrated_df, arc_df,
 
 
 # -------  integrate NAICS and SIC descriptions ------- #
+
+# def clean_naics(value):
+#     if pd.isna(value):
+#         # Return NaN values as is
+#         return value
+#     else:
+#         # Convert to string first to handle the value properly
+#         value_str = str(value)
+#         # Remove decimal point and trailing zeros
+#         if '.' in value_str:
+#             return value_str.split('.')[0]
+#         else:
+#             return value_str
+
+def clean_naics_preserve_zeros(value):
+    if pd.isna(value):
+        return value
+    
+    # Convert to string first
+    value_str = str(value).strip()
+    
+    # Handle empty or nan strings
+    if value_str == '' or value_str.lower() == 'nan':
+        return pd.NA
+    
+    # Check if it ends with .0, .00, etc (trailing zeros after decimal)
+    if '.' in value_str:
+        parts = value_str.split('.')
+        if len(parts) == 2 and parts[1] and all(c == '0' for c in parts[1]):
+            # Remove the decimal and trailing zeros, keep the integer part as-is
+            return parts[0]
+    
+    return value_str
+
+integrated_df['naics'] = integrated_df['naics'].apply(clean_naics_preserve_zeros)
 
 # remove trailing “.0” or any decimal from sic values
 integrated_df['sic'] = integrated_df['sic'].astype(str)
@@ -168,9 +209,15 @@ naics_title_lookup = dict(zip(
 ))
 
 # add naics_imputed column to integrated_df
+
+# impute NAICS codes based on SIC codes where NAICS is missing
+
 integrated_df['naics_imputed'] = integrated_df['naics'].fillna(
     integrated_df['sic'].astype(str).map(naics_code_lookup)  
 )
+
+
+# update naics descriptions based on NAICS codes
 
 integrated_df['naics_description'] = integrated_df['naics_imputed'].astype(str).map(naics_title_lookup)  
 

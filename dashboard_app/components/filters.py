@@ -4,7 +4,6 @@ import dash_bootstrap_components as dbc
 
 def create_filters(df):
     # Get unique values for each filter
-    unique_sectors = sorted(df["sector"].dropna().unique())
     unique_states = sorted(df["state"].dropna().unique())
 
     return html.Div(
@@ -69,6 +68,7 @@ def create_filters(df):
                                     3: '3σ'
                                 },
                                 value = 2, # Have 2σ automatic outlier filtering
+                                persistence_type='session',
                                 tooltip={
                                     "placement": "top", # Consistent with FY slider
                                     "always_visible": True, # Consistent with FY slider
@@ -156,7 +156,7 @@ def create_filters(df):
                 ],
                 className="justify-content-center",
             ),
-            # Second row - State, Sector, and ARC filters
+            # Second row - State, naics_description, and ARC filters
             dbc.Row(
                 [
                     # State filter
@@ -178,26 +178,32 @@ def create_filters(df):
                         ],
                         width=2,
                     ),
-                    # Sector filter
+                    # sector-description filter
                     dbc.Col(
                         [
                             html.Label("Sector:", className="filter-label"),
                             dcc.Dropdown(
                                 id="sector-filter",
                                 options=[
-                                    {"label": str(val), "value": val}
-                                    for val in unique_sectors
+                                    {
+                                        "label": f"{row['naics_imputed']} ({row['naics_description']})",
+                                        "value": row["naics_imputed"],
+                                    }
+                                    for _, row in (
+                                        df[["naics_imputed", "naics_description"]]
+                                        .dropna()
+                                        .drop_duplicates()
+                                        .sort_values("naics_imputed")
+                                        .iterrows()
+                                    )
                                 ],
                                 placeholder="Select Sector",
                                 multi=True,
-                                value=[
-                                    "Metal Coating and Allied Services",
-                                    "Electroplating, Plating, Polishing, Anodizing, and Coloring",
-                                    "Printed Circuit Boards",
-                                ],
-                                persistence_type="session",
+                                value= ["332812", "332813", "334418"],
+                                persistence_type='session',
                                 className="dash-dropdown",
                             ),
+                            html.Div(id="warning-message", style={"margin-top": "5px"}),
                         ],
                         width=5,
                     ),
@@ -211,13 +217,14 @@ def create_filters(df):
                                 id="arc-filter",
                                 options=[
                                     {
-                                        "label": f"{row['arc2']} ({row['arc_description']})",
+                                        "label": f"{row['arc2']} ({row['specific_description']})",
                                         "value": row["arc2"],
                                     }
                                     for _, row in (
-                                        df[["arc2", "arc_description"]]
+                                        df[["arc2", "specific_description"]]
                                         .dropna()
                                         .drop_duplicates()
+                                        .sort_values("arc2")
                                         .iterrows()
                                     )
                                 ],

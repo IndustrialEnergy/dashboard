@@ -26,8 +26,9 @@ from dashboard_app.callbacks.arc_filter_limit_callback import arc_filter_limit_c
 from dashboard_app.callbacks.emissions_co2_callback import emissions_co2_callback
 from dashboard_app.callbacks.emissions_so2_callback import emissions_so2_callback
 from dashboard_app.callbacks.emissions_nox_callback import emissions_nox_callback
-from dashboard_app.callbacks.electricity_boxplot_callback import emissions_electricity_callback
-from dashboard_app.callbacks.fuels_boxplot_callback import emissions_fuels_callback
+from dashboard_app.callbacks.electricity_boxplot_callback import electricity_callback
+from dashboard_app.callbacks.fuels_boxplot_callback import other_fuels_callback
+from dashboard_app.callbacks.natural_gas_boxplot_callback import natural_gas_callback
 from dashboard_app.callbacks.download_buttons_callback import download_csv
 from dashboard_app.callbacks.download_buttons_callback import download_excel
 
@@ -58,28 +59,31 @@ def create_app():
     print(integrated_df.info())
 
     filters_df = integrated_df[
-        ["fy", "sector", "state", "arc2", "arc_description", "impstatus"]
+        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "reference_year"]
     ]
     boxplot_cost_df = integrated_df[
-        ["fy", "sector", "state", "arc2", "arc_description", "impstatus", "impcost_adj"]
+        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "impcost_adj"]
     ]
     boxplot_payback_df = integrated_df[
-        ["fy", "sector", "state", "arc2", "arc_description", "impstatus", "payback"]
+        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "payback"]
     ]
     boxplot_co2_df = integrated_df[integrated_df['emission_type'] == "CO2"][
-        ["fy", "sector", "state", "arc2", "arc_description", "impstatus", "emissions_avoided"]
+        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "emissions_avoided"]
     ]
     boxplot_nox_df = integrated_df[integrated_df['emission_type'] == "NOx"][
-        ["fy", "sector", "state", "arc2", "arc_description", "impstatus", "emissions_avoided"]
+        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "emissions_avoided"]
     ]
     boxplot_so2_df = integrated_df[integrated_df['emission_type'] == "SO2"][
-        ["fy", "sector", "state", "arc2", "arc_description", "impstatus", "emissions_avoided"]
+        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "emissions_avoided"]
     ]
-    boxplot_electricity_df = integrated_df[integrated_df['sourccode'].isin(["EC", "ED", "EF"])][
-        ["fy", "sector", "state", "arc2", "arc_description", "impstatus", "conserved"]
+    boxplot_electricity_df = integrated_df[integrated_df['sourccode'].isin(["EC"])][
+        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "conserved"]
+    ]
+    boxplot_natural_gas_df = integrated_df[integrated_df['sourccode'].isin(["E2"])][
+    ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "conserved"]
     ]
     boxplot_fuels_df = integrated_df[~integrated_df['sourccode'].isin(["EC", "ED", "EF"])][
-        ["fy", "sector", "state", "arc2", "arc_description", "impstatus", "conserved"]
+        ["fy", "naics_description", "naics_imputed", "state", "arc2", "specific_description", "impstatus", "conserved"]
     ]
     # initialize callbacks
     cost_boxplot_callback(app, boxplot_cost_df)
@@ -87,8 +91,9 @@ def create_app():
     emissions_co2_callback(app, boxplot_co2_df)
     emissions_so2_callback(app, boxplot_so2_df)
     emissions_nox_callback(app, boxplot_nox_df)
-    emissions_electricity_callback(app, boxplot_electricity_df)
-    emissions_fuels_callback(app, boxplot_fuels_df)
+    electricity_callback(app, boxplot_electricity_df)
+    natural_gas_callback(app, boxplot_natural_gas_df)
+    other_fuels_callback(app, boxplot_fuels_df)
     arc_filter_limit_callback(app)
     download_excel(app, get_data_from_zip)
     download_csv(app)
@@ -107,7 +112,7 @@ def create_app():
             return create_about_page()
         elif pathname == "/dashboard":
             return create_dashboard_page(
-                filters_df
+                filters_df, reference_year=integrated_df["reference_year"].max()
             ) 
         elif pathname == "/documentation":
             return create_docs_page()
