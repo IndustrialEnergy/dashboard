@@ -10,6 +10,7 @@ import os
 
 
 def load_integrated_dataset():
+
     # Get data path from environment variable or construct default path
     data_dir = os.getenv("DATA_DIR")
 
