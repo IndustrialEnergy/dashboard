@@ -35,6 +35,7 @@ def create_filters(df):
                                         dots=False,
                                         step=1,
                                         allowCross=False,
+                                        persistence=True,
                                         persistence_type="session",
                                         tooltip={
                                             "placement": "top",
@@ -49,36 +50,36 @@ def create_filters(df):
                         width=3,
                         className="d-flex flex-column",
                     ),
-                     # Middle - Outlier Filter Slider
-                    dbc.Col([
-                        html.Label(
-                            "Outlier Exclusion Threshold (σ):",
-                            className="filter-label",
-                        ),
-                        html.Div([
-                            dcc.Slider(
-                                id="outlier-filter",
-                                min = 0,
-                                max = 3,
-                                step = 0.1,
-                                marks = {
-                                    0: '0σ',
-                                    1: '1σ',
-                                    2: '2σ',
-                                    3: '3σ'
-                                },
-                                value = 2, # Have 2σ automatic outlier filtering
-                                persistence_type='session',
-                                tooltip={
-                                    "placement": "top", # Consistent with FY slider
-                                    "always_visible": True, # Consistent with FY slider
-                                },
-                                className="custom-slider",
-                            )
+                    # Middle - Outlier Filter Slider
+                    dbc.Col(
+                        [
+                            html.Label(
+                                "Outlier Exclusion Threshold (σ):",
+                                className="filter-label",
+                            ),
+                            html.Div(
+                                [
+                                    dcc.Slider(
+                                        id="outlier-filter",
+                                        min=0,
+                                        max=3,
+                                        step=0.1,
+                                        marks={0: "0σ", 1: "1σ", 2: "2σ", 3: "3σ"},
+                                        value=2,  # Have 2σ automatic outlier filtering
+                                        persistence=True,
+                                        persistence_type="session",
+                                        tooltip={
+                                            "placement": "top",  # Consistent with FY slider
+                                            "always_visible": True,  # Consistent with FY slider
+                                        },
+                                        className="custom-slider",
+                                    )
+                                ],
+                                className="slider-container",
+                            ),
                         ],
-                        className="slider-container"),
-                    ], width = 2),
-
+                        width=2,
+                    ),
                     # Right side - Implementation Status
                     dbc.Col(
                         [
@@ -144,6 +145,7 @@ def create_filters(df):
                                         "align-items": "center",
                                     },
                                     inline=True,
+                                    persistence=True,
                                     persistence_type="session",
                                     className="status-checklist",
                                 ),
@@ -172,6 +174,7 @@ def create_filters(df):
                                 placeholder="Select State",
                                 multi=True,
                                 value=["CA", "TX", "CO"],
+                                persistence=True,
                                 persistence_type="session",
                                 className="dash-dropdown",
                             ),
@@ -199,8 +202,9 @@ def create_filters(df):
                                 ],
                                 placeholder="Select Sector",
                                 multi=True,
-                                value= ["332812", "332813", "334418"],
-                                persistence_type='session',
+                                value=["332812", "332813", "334418"],
+                                persistence=True,
+                                persistence_type="session",
                                 className="dash-dropdown",
                             ),
                             html.Div(id="warning-message", style={"margin-top": "5px"}),
@@ -230,7 +234,8 @@ def create_filters(df):
                                 ],
                                 placeholder="Select Assessment Recommendation (ARC)",
                                 multi=True,
-                                value= ["2.2511", "2.2514"],
+                                value=["2.2511", "2.2514"],
+                                persistence=True,
                                 persistence_type="session",
                                 className="dash-dropdown",
                             ),
@@ -240,15 +245,18 @@ def create_filters(df):
                     ),
                 ],
                 className="mb-2",
-            ), 
+            ),
         ],
         className="filter-container",
     )
 
-def filter_outliers(df, column_name, std_threshold = 2):
+
+def filter_outliers(df, column_name, std_threshold=2):
     if df.empty or column_name not in df.columns:
         return df
     mean = df[column_name].mean()
     std = df[column_name].std()
-    return df[(df[column_name] >= mean - std_threshold*std) &
-              (df[column_name] <= mean + std_threshold*std)]
+    return df[
+        (df[column_name] >= mean - std_threshold * std)
+        & (df[column_name] <= mean + std_threshold * std)
+    ]
