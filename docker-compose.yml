@@ -25,6 +25,7 @@ services:
       - TZ=America/Los_Angeles
     depends_on:
       - "industrialenergy_data"
+    profiles: ["pipeline"]
 
   # Dashboard application service - runs the Plotly Dash app
   industrialenergy_dashboard:
@@ -38,7 +39,7 @@ services:
       - 3009:3009
     environment:
       - PYTHONPATH=/app
-      - DATA_SERVER_URL=http://industrialenergy_data:3010/  # URL of the container that serves data files
+      - DATA_SERVER_URL=http://industrialenergy_data:3010/
       - TZ=America/Los_Angeles
       - DASH_BASE_PATHNAME=${DASH_BASE_PATHNAME:-/}
       - DATA_DIR=${DATA_DIR:-/app/data/final}
