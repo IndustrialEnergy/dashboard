@@ -22,7 +22,6 @@ from dashboard_app.pages.contact_page import create_contact_page
 # import callbacks
 from dashboard_app.callbacks.cost_boxplot_callback import cost_boxplot_callback
 from dashboard_app.callbacks.payback_boxplot_callback import payback_boxplot_callback
-from dashboard_app.callbacks.arc_filter_limit_callback import arc_filter_limit_callback
 from dashboard_app.callbacks.emissions_co2_callback import emissions_co2_callback
 from dashboard_app.callbacks.emissions_so2_callback import emissions_so2_callback
 from dashboard_app.callbacks.emissions_nox_callback import emissions_nox_callback
@@ -179,7 +178,6 @@ def create_app():
     electricity_callback(app, boxplot_electricity_df)
     natural_gas_callback(app, boxplot_natural_gas_df)
     other_fuels_callback(app, boxplot_fuels_df)
-    arc_filter_limit_callback(app)
     download_excel(app, get_data_from_zip)
     download_csv(app)
 
