@@ -39,7 +39,7 @@ services:
       - 3009:3009
     environment:
       - PYTHONPATH=/app
-      - DATA_SERVER_URL=http://industrialenergy_data:3010/
+      - DATA_SERVER_URL=http://industrialenergy_data:3010/  # URL of the container that serves data files
       - TZ=America/Los_Angeles
       - DASH_BASE_PATHNAME=${DASH_BASE_PATHNAME:-/}
       - DATA_DIR=${DATA_DIR:-/app/data/final}
