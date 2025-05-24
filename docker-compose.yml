@@ -25,6 +25,7 @@ services:
       - TZ=America/Los_Angeles
     depends_on:
       - "industrialenergy_data"
+    profiles: ["pipeline"]
 
   # Dashboard application service - runs the Plotly Dash app
   industrialenergy_dashboard:
