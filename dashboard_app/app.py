@@ -69,6 +69,10 @@ def create_app():
             "specific_description",
             "impstatus",
             "reference_year",
+            "main_code",
+            "main_description",
+            "sub_code",
+            "sub_description",
         ]
     ].drop_duplicates()
     boxplot_cost_df = integrated_df[

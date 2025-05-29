@@ -1,6 +1,7 @@
 from dash import Input, Output
 from charts.boxplot_electricity import create_boxplot_electricity_chart
 from components.filter_outliers import filter_outliers
+from components.filters import apply_wildcard_filter
 import pandas as pd
 
 
@@ -17,35 +18,32 @@ def electricity_callback(app, boxplot_electricity_df):
     def update_outputs(
         naics_imputed, fy_range, impstatus, arc2, state, remove_outliers
     ):
-        # create a mask for each filter
-        mask = pd.Series(True, index=boxplot_electricity_df.index)
-        # dummy_df = boxplot_electricity_df[(boxplot_electricity_df['state'] == 'TX') & (boxplot_electricity_df['arc2'] == '2.7492')]
+        # Start with full dataset
+        dff = boxplot_electricity_df.copy()
 
+        # Apply NAICS filter with wildcard support
         if naics_imputed:
-            mask &= boxplot_electricity_df["naics_imputed"].isin(naics_imputed)
+            dff = apply_wildcard_filter(dff, naics_imputed, "naics_imputed")
+
+        # Apply year range filter
         if fy_range:  # Handling range slider correctly
             min_year, max_year = fy_range  # Unpack the range values
-            mask &= (boxplot_electricity_df["fy"] >= min_year) & (
-                boxplot_electricity_df["fy"] <= max_year
-            )
+            dff = dff[(dff["fy"] >= min_year) & (dff["fy"] <= max_year)]
+
+        # Apply implementation status filter
         if impstatus:
-            mask &= boxplot_electricity_df["impstatus"].isin(impstatus)
+            dff = dff[dff["impstatus"].isin(impstatus)]
+
+        # Apply ARC filter with wildcard support
         if arc2:
-            mask &= boxplot_electricity_df["arc2"].isin(arc2)
+            dff = apply_wildcard_filter(dff, arc2, "arc2")
+
+        # Apply state filter
         if state:
-            mask &= boxplot_electricity_df["state"].isin(state)
+            dff = dff[dff["state"].isin(state)]
 
-        # apply all filters at once
-        dff = boxplot_electricity_df[mask]
-
+        # Apply outlier removal
         if remove_outliers:
             dff = filter_outliers(dff, "conserved", std_threshold=2)
-
-        # # [TEST - REMOVE BEFORE PROD] print filtered data info
-        # print(f"dummy: {dummy_df.head(30)}")
-        # print(f"dummy: {dummy_df.shape}")
-        # # print(f"Filtered unique statuses: {dff['impstatus'].unique()}")
-        # print(f"Filtered data shape: {dff.shape}")
-        # print(dff.head(30))
 
         return create_boxplot_electricity_chart(dff)

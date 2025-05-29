@@ -1,6 +1,7 @@
 from dash import Input, Output
 from charts.boxplot_nox import create_boxplot_nox_chart
 from components.filter_outliers import filter_outliers
+from components.filters import apply_wildcard_filter
 import pandas as pd
 
 
@@ -17,27 +18,32 @@ def emissions_nox_callback(app, boxplot_nox_df):
     def update_outputs(
         naics_imputed, fy_range, impstatus, arc2, state, remove_outliers
     ):
-        # create a mask for each filter
-        mask = pd.Series(True, index=boxplot_nox_df.index)
+        # Start with full dataset
+        dff = boxplot_nox_df.copy()
         # dummy_df = boxplot_nox_df[(boxplot_nox_df['state'] == 'TX') & (boxplot_nox_df['arc2'] == '2.7492')]
 
+        # Apply NAICS filter with wildcard support
         if naics_imputed:
-            mask &= boxplot_nox_df["naics_imputed"].isin(naics_imputed)
+            dff = apply_wildcard_filter(dff, naics_imputed, "naics_imputed")
+
+        # Apply year range filter
         if fy_range:  # Handling range slider correctly
             min_year, max_year = fy_range  # Unpack the range values
-            mask &= (boxplot_nox_df["fy"] >= min_year) & (
-                boxplot_nox_df["fy"] <= max_year
-            )
+            dff = dff[(dff["fy"] >= min_year) & (dff["fy"] <= max_year)]
+
+        # Apply implementation status filter
         if impstatus:
-            mask &= boxplot_nox_df["impstatus"].isin(impstatus)
+            dff = dff[dff["impstatus"].isin(impstatus)]
+
+        # Apply ARC filter with wildcard support
         if arc2:
-            mask &= boxplot_nox_df["arc2"].isin(arc2)
+            dff = apply_wildcard_filter(dff, arc2, "arc2")
+
+        # Apply state filter
         if state:
-            mask &= boxplot_nox_df["state"].isin(state)
+            dff = dff[dff["state"].isin(state)]
 
-        # apply all filters at once
-        dff = boxplot_nox_df[mask]
-
+        # Apply outlier removal
         if remove_outliers:
             dff = filter_outliers(dff, "emissions_avoided", std_threshold=2)
 

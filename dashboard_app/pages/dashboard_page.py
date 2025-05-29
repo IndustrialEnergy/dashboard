@@ -119,12 +119,13 @@ def create_dashboard_page(filters_df, reference_year):
                             ),
                         ]
                     ),
-                    # SECTION: Cost Metrics
+                    # SECTION: Investment Metrics
                     dbc.Row(
                         [
                             dbc.Col(
                                 html.H4(
-                                    "Cost Metrics", className="section-header mt-4 mb-3"
+                                    "Investment Metrics",
+                                    className="section-header mt-4 mb-3",
                                 ),
                                 width=12,
                             )
