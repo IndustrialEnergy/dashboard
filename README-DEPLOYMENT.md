@@ -5,7 +5,7 @@
 ### When you have new data:
 ```bash
 # 1. Process the data (runs once and stops)
-docker-compose --profile pipeline up --abort-on-container-exit
+docker-compose --profile pipeline run --rm industrialenergy_datapipeline
 
 # 2. Start the dashboard
 docker-compose up -d industrialenergy_data industrialenergy_dashboard
@@ -18,7 +18,7 @@ export DASH_BASE_PATHNAME=/capstone/industrialenergy/dashboard/
 export DATA_DIR=/capstone/industrialenergy/dashboard/data/final
 
 # Then run the same commands
-docker-compose --profile pipeline up --abort-on-container-exit
+docker-compose --profile pipeline run --rm industrialenergy_datapipeline
 docker-compose up -d industrialenergy_data industrialenergy_dashboard
 ```
 
@@ -38,7 +38,7 @@ docker-compose up -d industrialenergy_data industrialenergy_dashboard
 
 ## What Each Command Does
 
-- **`docker-compose --profile pipeline up --abort-on-container-exit`**: Runs data processing (stops all when done)
+- **`docker-compose --profile pipeline run --rm industrialenergy_datapipeline`**: Runs data processing (stops all when done)
 - **`docker-compose up`**: Runs data server + dashboard (safe default)
 - **`docker-compose build`**: Builds all services (now works!)
 
@@ -139,3 +139,11 @@ docker exec dashboard-industrialenergy_dashboard-1 env | grep -E "(DASH|DATA)"
 # Manual data processing (if pipeline fails)
 docker-compose run --rm industrialenergy_datapipeline
 ```
+
+## Recommended Approach
+
+### Keep your main services running
+docker-compose up -d industrialenergy_data industrialenergy_dashboard
+
+### Run pipeline when needed (without affecting other services)
+docker-compose --profile pipeline run --rm industrialenergy_datapipeline
