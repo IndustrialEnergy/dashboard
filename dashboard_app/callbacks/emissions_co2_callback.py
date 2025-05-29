@@ -47,7 +47,9 @@ def emissions_co2_callback(app, boxplot_co2_df):
 
         # Apply outlier removal
         if remove_outliers:
-            dff = filter_outliers(dff, "emissions_avoided", std_threshold=2)
+            dff = filter_outliers(
+                dff, "emissions_avoided", std_threshold=remove_outliers
+            )
 
         # [TEST - REMOVE BEFORE PROD] print filtered data info
         print(f"dummy: {dummy_df.head(30)}")

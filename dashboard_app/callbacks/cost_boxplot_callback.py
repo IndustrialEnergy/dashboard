@@ -82,7 +82,7 @@ def cost_boxplot_callback(app, boxplot_cost_df):
         if remove_outliers:
             print("\nOutlier removal debug:")
             print(f"Before outlier removal: {len(dff)} rows")
-            dff = filter_outliers(dff, "impcost_adj", std_threshold=2)
+            dff = filter_outliers(dff, "impcost_adj", std_threshold=remove_outliers)
             print(f"After outlier removal: {len(dff)} rows")
 
         print("\nFinal data summary:")
