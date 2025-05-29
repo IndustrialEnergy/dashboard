@@ -70,7 +70,7 @@ def create_app():
             "impstatus",
             "reference_year",
         ]
-    ]
+    ].drop_duplicates()
     boxplot_cost_df = integrated_df[
         [
             "fy",
@@ -82,7 +82,7 @@ def create_app():
             "impstatus",
             "impcost_adj",
         ]
-    ]
+    ].drop_duplicates()
     boxplot_payback_df = integrated_df[
         [
             "fy",
@@ -92,9 +92,9 @@ def create_app():
             "arc2",
             "specific_description",
             "impstatus",
-            "payback",
+            "payback_imputed",
         ]
-    ]
+    ].drop_duplicates()
     boxplot_co2_df = integrated_df[integrated_df["emission_type"] == "CO2"][
         [
             "fy",
@@ -106,7 +106,7 @@ def create_app():
             "impstatus",
             "emissions_avoided",
         ]
-    ]
+    ].drop_duplicates()
     boxplot_nox_df = integrated_df[integrated_df["emission_type"] == "NOx"][
         [
             "fy",
@@ -118,7 +118,7 @@ def create_app():
             "impstatus",
             "emissions_avoided",
         ]
-    ]
+    ].drop_duplicates()
     boxplot_so2_df = integrated_df[integrated_df["emission_type"] == "SO2"][
         [
             "fy",
@@ -130,7 +130,7 @@ def create_app():
             "impstatus",
             "emissions_avoided",
         ]
-    ]
+    ].drop_duplicates()
     boxplot_electricity_df = integrated_df[integrated_df["sourccode"].isin(["EC"])][
         [
             "fy",
@@ -142,7 +142,7 @@ def create_app():
             "impstatus",
             "conserved",
         ]
-    ]
+    ].drop_duplicates()
     boxplot_natural_gas_df = integrated_df[integrated_df["sourccode"].isin(["E2"])][
         [
             "fy",
@@ -154,7 +154,7 @@ def create_app():
             "impstatus",
             "conserved",
         ]
-    ]
+    ].drop_duplicates()
     boxplot_fuels_df = integrated_df[
         ~integrated_df["sourccode"].isin(["EC", "ED", "EF"])
     ][
@@ -168,7 +168,7 @@ def create_app():
             "impstatus",
             "conserved",
         ]
-    ]
+    ].drop_duplicates()
     # initialize callbacks
     cost_boxplot_callback(app, boxplot_cost_df)
     payback_boxplot_callback(app, boxplot_payback_df)

@@ -10,7 +10,6 @@ import numpy as np
 
 
 def load_integrated_dataset():
-
     # Get data path from environment variable or construct default path
     data_dir = os.getenv("DATA_DIR")
 
@@ -36,13 +35,13 @@ def load_integrated_dataset():
     print(f"\nFile size: {data_path.stat().st_size:,} bytes")
 
     # Read first few lines of the file to check structure
-    with open(data_path, "r") as f:
-        print("\nFirst few lines of the file:")
-        for i, line in enumerate(f):
-            if i < 3:  # Print first 3 lines
-                print(line.strip())
-            else:
-                break
+    # with open(data_path, "r") as f:
+    #     print("\nFirst few lines of the file:")
+    #     for i, line in enumerate(f):
+    #         if i < 3:  # Print first 3 lines
+    #             print(line.strip())
+    #         else:
+    #             break
 
     # load data with optimized dtypes for improved performance
     integrated_df = pd.read_csv(
@@ -66,25 +65,25 @@ def load_integrated_dataset():
     # Clean up impstatus column - replace NaN with 'Unknown'
     integrated_df["impstatus"] = integrated_df["impstatus"].fillna("K")
 
-    print("\nDataset loaded successfully:")
-    print(f"Shape: {integrated_df.shape}")
-    print("\nData types:")
-    print(integrated_df.dtypes)
-    print("\nSample of data:")
-    print(integrated_df[["fy", "state", "arc2", "naics_imputed", "impstatus"]].head())
-    print("\nUnique values in key columns:")
-    print(f"States: {sorted(integrated_df['state'].unique())}")
-    print(f"Implementation statuses: {sorted(integrated_df['impstatus'].unique())}")
-    print(f"ARC codes: {len(integrated_df['arc2'].unique())} unique values")
-    print(f"NAICS codes: {len(integrated_df['naics_imputed'].unique())} unique values")
+    # print("\nDataset loaded successfully:")
+    # print(f"Shape: {integrated_df.shape}")
+    # print("\nData types:")
+    # print(integrated_df.dtypes)
+    # print("\nSample of data:")
+    # print(integrated_df[["fy", "state", "arc2", "naics_imputed", "impstatus"]].head())
+    # print("\nUnique values in key columns:")
+    # print(f"States: {sorted(integrated_df['state'].unique())}")
+    # print(f"Implementation statuses: {sorted(integrated_df['impstatus'].unique())}")
+    # print(f"ARC codes: {len(integrated_df['arc2'].unique())} unique values")
+    # print(f"NAICS codes: {len(integrated_df['naics_imputed'].unique())} unique values")
 
-    # Validate critical columns
-    if integrated_df["state"].isna().any():
-        print("\nWARNING: Found NULL values in state column!")
-    if integrated_df["impstatus"].isna().any():
-        print("\nWARNING: Found NULL values in impstatus column!")
-    if integrated_df["arc2"].isna().any():
-        print("\nWARNING: Found NULL values in arc2 column!")
+    # # Validate critical columns
+    # if integrated_df["state"].isna().any():
+    #     print("\nWARNING: Found NULL values in state column!")
+    # if integrated_df["impstatus"].isna().any():
+    #     print("\nWARNING: Found NULL values in impstatus column!")
+    # if integrated_df["arc2"].isna().any():
+    #     print("\nWARNING: Found NULL values in arc2 column!")
 
     # convert string columns that have < 100 unique values to categorical for improved performance
     skip_cols = [

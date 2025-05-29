@@ -17,17 +17,17 @@ def cost_boxplot_callback(app, boxplot_cost_df):
     def update_outputs(
         naics_imputed, fy_range, impstatus, arc2, state, remove_outliers
     ):
-        print("\n=== Cost Boxplot Filtering Debug ===")
-        print(f"Initial dataframe shape: {boxplot_cost_df.shape}")
-        print(f"Initial data types:")
-        print(boxplot_cost_df.dtypes)
-        print("\nFilter values received:")
-        print(f"  NAICS codes: {naics_imputed}")
-        print(f"  Year range: {fy_range}")
-        print(f"  Implementation status: {impstatus}")
-        print(f"  ARC codes: {arc2}")
-        print(f"  States: {state}")
-        print(f"  Remove outliers: {remove_outliers}")
+        # print("\n=== Cost Boxplot Filtering Debug ===")
+        # print(f"Initial dataframe shape: {boxplot_cost_df.shape}")
+        # print(f"Initial data types:")
+        # print(boxplot_cost_df.dtypes)
+        # print("\nFilter values received:")
+        # print(f"  NAICS codes: {naics_imputed}")
+        # print(f"  Year range: {fy_range}")
+        # print(f"  Implementation status: {impstatus}")
+        # print(f"  ARC codes: {arc2}")
+        # print(f"  States: {state}")
+        # print(f"  Remove outliers: {remove_outliers}")
 
         # create a mask for each filter
         mask = pd.Series(True, index=boxplot_cost_df.index)

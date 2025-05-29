@@ -27,7 +27,7 @@ def create_boxplot_cost_chart(boxplot_cost_df):
         y="impcost_adj",
         color="impstatus",
         boxmode="group",
-        points="suspectedoutliers",
+        points="all",
         labels={
             "arc2": "Recommendation Type",
             "impcost_adj": "Implementation Cost ($)",
@@ -37,10 +37,13 @@ def create_boxplot_cost_chart(boxplot_cost_df):
         template="plotly_white",
     )
 
+    fig.update_traces(
+        marker=dict(size=5),  # boxplot point size
+    )
     # update legend labels
     fig.for_each_trace(lambda t: t.update(name=status_labels[t.name]))
 
-    # update legend layout
+    # update legend layout - styling now handled by CSS
     fig.update_layout(
         legend=dict(
             orientation="h",
@@ -48,7 +51,11 @@ def create_boxplot_cost_chart(boxplot_cost_df):
             y=1.02,
             xanchor="left",
             x=0,
-        )
+        ),
+        boxgap=0.5,  # Reduced gap between boxes in same group for better spacing
+        boxgroupgap=0.6,  # Reduced gap between different groups
+        autosize=True,  # Responsive sizing - height controlled by CSS
+        margin=dict(l=60, r=40, t=60, b=60),  # Reduced margins for tighter fit
     )
 
     return fig

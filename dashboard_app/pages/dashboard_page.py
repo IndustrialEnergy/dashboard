@@ -7,9 +7,7 @@ from components.filters import create_filters
 # from dashboard_app.charts import create_boxplot_cost_chart
 
 
-def create_dashboard_page(
-    filters_df, reference_year
-):  
+def create_dashboard_page(filters_df, reference_year):
     content = html.Div(
         [
             dbc.Row(
@@ -66,7 +64,7 @@ def create_dashboard_page(
                                                         dcc.Graph(
                                                             id="electricity-boxplot"
                                                         ),
-                                                        className="chart-container",
+                                                        className="chart-container boxplot-chart",
                                                     )
                                                 ]
                                             ),
@@ -88,7 +86,7 @@ def create_dashboard_page(
                                                         dcc.Graph(
                                                             id="natural-gas-boxplot"
                                                         ),
-                                                        className="chart-container",
+                                                        className="chart-container boxplot-chart",
                                                     )
                                                 ]
                                             ),
@@ -110,7 +108,7 @@ def create_dashboard_page(
                                                         dcc.Graph(
                                                             id="other-fuels-boxplot"
                                                         ),
-                                                        className="chart-container",
+                                                        className="chart-container boxplot-chart",
                                                     )
                                                 ]
                                             ),
@@ -133,7 +131,7 @@ def create_dashboard_page(
                         ]
                     ),
                     dbc.Row(
-                        [ 
+                        [
                             dbc.Col(
                                 [
                                     dbc.Card(
@@ -145,7 +143,7 @@ def create_dashboard_page(
                                                 [
                                                     html.Div(
                                                         dcc.Graph(id="cost-boxplot"),
-                                                        className="chart-container",
+                                                        className="chart-container boxplot-chart",
                                                     )
                                                 ]
                                             ),
@@ -158,12 +156,14 @@ def create_dashboard_page(
                                 [
                                     dbc.Card(
                                         [
-                                            dbc.CardHeader("Payback Period Distribution"),
+                                            dbc.CardHeader(
+                                                "Payback Period Distribution"
+                                            ),
                                             dbc.CardBody(
                                                 [
                                                     html.Div(
                                                         dcc.Graph(id="payback-boxplot"),
-                                                        className="chart-container",
+                                                        className="chart-container boxplot-chart",
                                                     )
                                                 ]
                                             ),
@@ -197,7 +197,7 @@ def create_dashboard_page(
                                                 [
                                                     html.Div(
                                                         dcc.Graph(id="co2-boxplot"),
-                                                        className="chart-container",
+                                                        className="chart-container boxplot-chart",
                                                     )
                                                 ]
                                             ),
@@ -215,7 +215,7 @@ def create_dashboard_page(
                                                 [
                                                     html.Div(
                                                         dcc.Graph(id="so2-boxplot"),
-                                                        className="chart-container",
+                                                        className="chart-container boxplot-chart",
                                                     )
                                                 ]
                                             ),
@@ -233,7 +233,7 @@ def create_dashboard_page(
                                                 [
                                                     html.Div(
                                                         dcc.Graph(id="nox-boxplot"),
-                                                        className="chart-container",
+                                                        className="chart-container boxplot-chart",
                                                     )
                                                 ]
                                             ),
