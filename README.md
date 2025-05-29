@@ -138,6 +138,6 @@ Merge Strategy
 
 ## Authors
 
-Student Authors: Oksana Protsukha, Naommi Moraes, Yos Ramirez, Eva Newby.
+Student Authors: Oksana Protsukha, Naomi Moraes, Eva Newby, Yos Ramirez.
 
 Capstone Advisor: Dr. Eric Masanet
