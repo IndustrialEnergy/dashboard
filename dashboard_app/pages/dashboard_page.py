@@ -138,7 +138,7 @@ def create_dashboard_page(filters_df, reference_year):
                                     dbc.Card(
                                         [
                                             dbc.CardHeader(
-                                                f"Implementation Cost Distribution ({reference_year} Year PPI-Adjusted)"
+                                                f"Implementation Cost Distribution ({reference_year} Year PPI-Adjusted Dollars)"
                                             ),
                                             dbc.CardBody(
                                                 [
@@ -158,7 +158,7 @@ def create_dashboard_page(filters_df, reference_year):
                                     dbc.Card(
                                         [
                                             dbc.CardHeader(
-                                                "Payback Period Distribution"
+                                                "Simple Payback Period Distribution"
                                             ),
                                             dbc.CardBody(
                                                 [
@@ -193,7 +193,9 @@ def create_dashboard_page(filters_df, reference_year):
                                 [
                                     dbc.Card(
                                         [
-                                            dbc.CardHeader("Annual Reduction in CO2"),
+                                            dbc.CardHeader(
+                                                "Annual Reduction in Carbon Dioxide (CO2) Distribution"
+                                            ),
                                             dbc.CardBody(
                                                 [
                                                     html.Div(
@@ -211,7 +213,9 @@ def create_dashboard_page(filters_df, reference_year):
                                 [
                                     dbc.Card(
                                         [
-                                            dbc.CardHeader("Annual Reduction in SO2"),
+                                            dbc.CardHeader(
+                                                "Annual Reduction in Sulphur Dioxide (SO2) Distribution"
+                                            ),
                                             dbc.CardBody(
                                                 [
                                                     html.Div(
@@ -229,7 +233,9 @@ def create_dashboard_page(filters_df, reference_year):
                                 [
                                     dbc.Card(
                                         [
-                                            dbc.CardHeader("Annual Reduction in NOx"),
+                                            dbc.CardHeader(
+                                                "Annual Reduction in Nitrogen Oxides (NOx) Distribution"
+                                            ),
                                             dbc.CardBody(
                                                 [
                                                     html.Div(

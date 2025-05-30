@@ -31,7 +31,7 @@ def create_boxplot_so2_chart(boxplot_so2_df):
         points="all",
         labels={
             "arc2": "Recommendation Type",
-            "emissions_avoided": "Emissions Avoided (kg per year)",
+            "emissions_avoided": "SO2 Emissions Avoided (kg per year)",
             "impstatus": "Status",
         },
         category_orders={"impstatus": ["I", "N", "P", "K"]},
