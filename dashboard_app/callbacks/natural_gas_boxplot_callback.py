@@ -44,6 +44,6 @@ def natural_gas_callback(app, boxplot_natural_gas_df):
 
         # Apply outlier removal
         if remove_outliers:
-            dff = filter_outliers(dff, "conserved", std_threshold=2)
+            dff = filter_outliers(dff, "conserved", std_threshold=remove_outliers)
 
         return create_boxplot_natural_gas_chart(dff)

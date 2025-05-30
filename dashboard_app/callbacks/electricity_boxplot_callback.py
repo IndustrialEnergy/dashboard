@@ -44,6 +44,6 @@ def electricity_callback(app, boxplot_electricity_df):
 
         # Apply outlier removal
         if remove_outliers:
-            dff = filter_outliers(dff, "conserved", std_threshold=2)
+            dff = filter_outliers(dff, "conserved", std_threshold=remove_outliers)
 
         return create_boxplot_electricity_chart(dff)
