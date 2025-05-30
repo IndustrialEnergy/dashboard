@@ -30,7 +30,7 @@ def create_boxplot_nox_chart(boxplot_nox_df):
         points="all",
         labels={
             "arc2": "Recommendation Type",
-            "emissions_avoided": "Emissions Avoided (kg per year)",
+            "emissions_avoided": "NOx Emissions Avoided (kg per year)",
             "impstatus": "Status",
         },
         category_orders={"impstatus": ["I", "N", "P", "K"]},
