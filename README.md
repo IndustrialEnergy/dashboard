@@ -1,5 +1,7 @@
 # Dashboard for the Industrial Energy Data Exploration Interface
-Web application for Industrial Energy Capstone Project
+
+The Industrial Energy Dashboard is a web-based analytics platform built with Python Dash that enables interactive exploration of industrial energy efficiency program data. The system processes raw energy datasets and presents them through dynamic visualizations with real-time filtering capabilities.
+
 
 ## Repository organization
 
@@ -104,13 +106,54 @@ The organization of the repo follows best practices:
 
 
 ## Web Application Architecture 
-Each module in this web application interacts with others to form the complete system.
 
-* **Dashboard Page:** The dashboard_page.py serves as the central page, calling various components, charts, and tables from the components, charts, and layouts directories. Data for these components is pulled from various sources (e.g., data/.xlsx., python scripts)
-* **Callbacks:** The callbacks python script contains code that defines interactivity on the dashboard, such as filtering data or updating charts. These callback functions interact with the user interface elements like buttons, charts, and tables. For example, the filter_panel.py triggers updates on charts and tables when users select new filters.
-* **Charts and Components:** Scripts under the charts directory represent different types of visualizations, each of which receives data from the data folder and can be updated. Components like the navbar.py and footer.py are essential for the overall layout, providing a consistent user experience.
-* **Server:** The server.py file handles the setup of the application’s backend, configuring the server and handling requests to render different pages and serve dynamic content. It connects to the dashboard_page.py, about_page.py, and other pages.
-* **Testing:** The test directory contains unit tests for different components. Each component has corresponding tests, for example testing the functions in charts or verifying the interactivity of filter_panel.py. 
+## 🏗️ **Core Architecture**
+
+![Industrial Energy Dashboard Architecture](dashboard_app/assets/dashboard_architecture.png)
+
+**server.py**: Application entry point that configures and starts the web server \
+**app.py**: Application controller that imports all components, manages routing, and initializes interactivity \
+**data_loader.py**: Data access layer that loads and processes the integrated CSV dataset into pandas DataFrame
+
+### **Modular Component Organization**
+The application follows a modular design with four specialized layers:
+
+- **📄 Pages**: Define page layouts and structure (`pages/`)
+- **🧩 Components**: Reusable UI elements like filters and navigation (`components/`)  
+- **📊 Charts**: Visualization functions that generate interactive plots (`charts/`)
+- **⚡ Callbacks**: Interactive logic linking user inputs to chart updates (`callbacks/`)
+
+
+## 🔄 **Key System Flows**
+
+### **1. Data Flow**
+```
+Raw CSV Files → data_loader.py → pandas DataFrame → app.py → Components/Charts
+```
+Data is loaded once at startup and cached in memory for fast filtering and visualization.
+
+### **2. User Interaction Flow**  
+```
+User Selects Filter → Callback Triggered → Data Filtered → Chart Updated → UI Refreshed
+```
+All interactions happen client-side without page reloads, providing responsive user experience.
+
+### **3. Component Integration Flow**
+```
+app.py imports → Pages import Components/Charts → Callbacks link IDs → Live Interactivity
+```
+Each component layer builds on the previous, with callbacks providing the "glue" between UI elements and data processing.
+
+---
+
+## 🔧 **Adding New Features**
+
+### **New Visualization Workflow**
+1. **Create chart function** in `charts/` (data → plotly figure)
+2. **Create callback** in `callbacks/` (link filters → chart updates)  
+3. **Add to page layout** in `pages/` (import and position chart)
+4. **Initialize callback** in `app.py` (register with Dash app)
+
 
 ## Version Control Practices
 
