@@ -30,6 +30,7 @@ from dashboard_app.callbacks.fuels_boxplot_callback import other_fuels_callback
 from dashboard_app.callbacks.natural_gas_boxplot_callback import natural_gas_callback
 from dashboard_app.callbacks.download_buttons_callback import download_csv
 from dashboard_app.callbacks.download_buttons_callback import download_excel
+import dashboard_app.callbacks.data_page_callback  # Import data page callbacks
 
 # Import components for download callback
 from dashboard_app.components.download_buttons import get_data_from_zip
