@@ -592,3 +592,21 @@ body {
     flex-direction: column;
 }
 
+.info-section {
+    text-align: center;
+    padding: 8px 0;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.info-section a {
+    color: #6c757d;
+    text-decoration: underline;
+}
+
+.info-section a:hover {
+    color: #495057;
+    text-decoration: underline;
+}
