@@ -1,7 +1,7 @@
 from dash import Input, Output
 from charts.boxplot_cost import create_boxplot_cost_chart
-from components.filter_outliers import filter_outliers
-from components.filters import apply_wildcard_filter
+from helpers.filter_outliers import filter_outliers
+from helpers.apply_wildcard_filter import apply_wildcard_filter
 import pandas as pd
 
 

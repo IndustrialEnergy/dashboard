@@ -204,7 +204,7 @@ def create_filters(df):
                                 ],
                                 placeholder="All sectors",  # UPDATED PLACEHOLDER
                                 multi=True,
-                                value=["332812", "332813", "334418"],
+                                value=["332*"],
                                 persistence=True,
                                 persistence_type="session",
                                 className="dash-dropdown",
