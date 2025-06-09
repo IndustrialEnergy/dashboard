@@ -4,7 +4,10 @@ import pandas as pd
 from pathlib import Path
 import numpy as np
 from janitor import clean_names
+import re
+from datetime import datetime
 import sys
+import json
 
 # ------- define paths and file names -------
 
@@ -25,6 +28,18 @@ if not iac_files:
     sys.exit(0)  # Exit cleanly with success code
 
 iac_file = max(iac_files, key=lambda f: f.stat().st_mtime)
+
+# extract last updatedtimestamp from filename
+timestamp_match = re.search(r"IAC_Database_(\d{8})\.xls", iac_file.name)
+if timestamp_match:
+    file_timestamp = timestamp_match.group(1)
+    last_updated_formatted = datetime.strptime(file_timestamp, "%Y%m%d").strftime(
+        "%B %d, %Y"
+    )
+else:
+    file_timestamp = "unknown"
+    last_updated_formatted = "Unknown"
+
 # continue processing if files found
 
 # ------- import data -------
@@ -241,7 +256,7 @@ iac_df = pd.merge(
 
 iac_df.drop_duplicates(inplace=True)
 
-# ------------------------ Clean intergrated IAC dataset ------------------------#
+# ------------------------ Clean integrated IAC dataset ------------------------#
 
 # Filter out records prior to 1990 and rows with arc2 >= 3 (non-energy related)
 # Reason: we don't have emissions and PPI data prior to 1990
@@ -266,9 +281,30 @@ iac_df["payback_imputed"] = iac_df["payback"].combine_first(
 )
 
 iac_df["payback_imputed"] = pd.to_numeric(iac_df["payback_imputed"], errors="coerce")
-iac_df["emissions_avoided"] = iac_df["emissions_avoided"].round(4)
+iac_df["payback_imputed"] = iac_df["payback_imputed"].round(3)
 
 # ------------------------ Save data to CSV ------------------------#
 
 # Save the cleaned data to a CSV file
 iac_df.to_csv("../../data/processed/iac.csv", index=False)
+
+# ------------------------ Create Metadata ------------------------#
+
+final_file_name = "iac_integrated.csv"
+final_path = Path("../../data/final/")
+# Create metadata
+metadata = {
+    "data_info": {
+        "last_updated": last_updated_formatted,
+        "source_file": iac_file.name,
+        "processing_datetime": datetime.now().isoformat(),
+    },
+    "file_info": {
+        "filename": final_file_name,
+    },
+}
+
+# Save metadata to final folder
+metadata_filepath = final_path / "iac_metadata.json"
+with open(metadata_filepath, "w") as f:
+    json.dump(metadata, f, indent=2)

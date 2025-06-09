@@ -141,7 +141,7 @@ integrated_df.loc[integrated_df["sourccode"] == "EC", "emissions_avoided"] = (
 integrated_df["emissions_avoided"] = pd.to_numeric(
     integrated_df["emissions_avoided"], errors="coerce"
 )
-integrated_df["emissions_avoided"] = integrated_df["emissions_avoided"].round(8)
+integrated_df["emissions_avoided"] = integrated_df["emissions_avoided"].round(4)
 
 integrated_df["emission_factor"] = pd.to_numeric(
     integrated_df["emission_factor"], errors="coerce"

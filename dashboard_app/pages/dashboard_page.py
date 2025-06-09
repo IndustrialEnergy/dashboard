@@ -3,11 +3,22 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from layouts.base_layout import create_base_layout
 from components.filters import create_filters
+import json
+from pathlib import Path
 # Import charts
 # from dashboard_app.charts import create_boxplot_cost_chart
 
 
 def create_dashboard_page(filters_df, reference_year):
+    # Read metadata for last updated
+    try:
+        metadata_path = Path("data/final/iac_metadata.json")
+        with open(metadata_path, "r") as f:
+            metadata = json.load(f)
+        last_updated = metadata["data_info"]["last_updated"]
+    except:
+        last_updated = "Unknown"
+
     content = html.Div(
         [
             dbc.Row(
@@ -18,10 +29,27 @@ def create_dashboard_page(filters_df, reference_year):
                     )
                 ]
             ),
-            # Left sidebar for filters
+            # Filters row
             dbc.Row(
                 [
                     create_filters(filters_df),
+                ]
+            ),
+            # # Last updated row
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            html.Div(
+                                [
+                                    f"Based on IAC assessment data from: {last_updated} | ",
+                                    html.A("View all data sources", href="/data"),
+                                ],
+                                className="info-section",
+                            )
+                        ],
+                        width=12,
+                    )
                 ]
             ),
             # Main content area for charts
