@@ -11,7 +11,6 @@ import dash_bootstrap_components as dbc
 
 # import pages
 from data_loader import load_integrated_dataset
-
 from dashboard_app.pages.home_page import create_home_page
 from dashboard_app.pages.about_page import create_about_page
 from dashboard_app.pages.dashboard_page import create_dashboard_page
@@ -30,10 +29,14 @@ from dashboard_app.callbacks.fuels_boxplot_callback import other_fuels_callback
 from dashboard_app.callbacks.natural_gas_boxplot_callback import natural_gas_callback
 from dashboard_app.callbacks.download_buttons_callback import download_csv
 from dashboard_app.callbacks.download_buttons_callback import download_excel
-import dashboard_app.callbacks.data_page_callback  # Import data page callbacks
+from dashboard_app.callbacks.techdoc_callback import download_td_pdf
+from dashboard_app.callbacks.user_guide_callback import download_ug_pdf
 
-# Import components for download callback
-from dashboard_app.components.download_buttons import get_data_from_zip
+# Import components
+from dashboard_app.components.download_buttons import get_data_from_local
+from dashboard_app.components.techdoc_downloadbttn import get_td_from_local
+from dashboard_app.components.userguide_downloadbttn import get_ug_from_local
+
 
 
 def create_app():
@@ -174,6 +177,7 @@ def create_app():
             "conserved",
         ]
     ].drop_duplicates()
+    
     # initialize callbacks
     cost_boxplot_callback(app, boxplot_cost_df)
     payback_boxplot_callback(app, boxplot_payback_df)
@@ -183,8 +187,10 @@ def create_app():
     electricity_callback(app, boxplot_electricity_df)
     natural_gas_callback(app, boxplot_natural_gas_df)
     other_fuels_callback(app, boxplot_fuels_df)
-    download_excel(app, get_data_from_zip)
-    download_csv(app)
+    download_excel(app, get_data_from_local)
+    download_csv(app, get_data_from_local)
+    download_td_pdf(app, get_td_from_local)
+    download_ug_pdf(app, get_ug_from_local)
 
     # URL routing
     app.layout = html.Div(
@@ -229,3 +235,4 @@ def create_app():
 if __name__ == "__main__":
     app = create_app()
     app.run_server(debug=True)
+ 
