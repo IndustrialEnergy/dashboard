@@ -12,7 +12,7 @@ RAW_DIR="${DATA_DIR}/raw"
 ARCHIVE_DIR="${DATA_DIR}/archive"
 PROCESSED_DIR="${DATA_DIR}/processed"
 FINAL_DIR="${DATA_DIR}/final"
-LOG_DIR="${DATA_DIR}/logs"
+LOG_DIR="${DATA_DIR}/.logs"
 
 # Ensure output directories exist
 mkdir -p "$ARCHIVE_DIR" "$PROCESSED_DIR" "$FINAL_DIR" "$LOG_DIR"

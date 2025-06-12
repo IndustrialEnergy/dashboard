@@ -1,0 +1,32 @@
+2025-06-12 14:15:51 - === Starting data pipeline ===
+2025-06-12 14:15:51 - Base directory: /app
+2025-06-12 14:15:51 - Raw data directory: /app/data/raw
+2025-06-12 14:15:51 - Contents of raw directory:
+total 147736
+drwxr-xr-x  8 root root      256 Jun 12 14:14 .
+drwxr-xr-x 10 root root      320 Jun 12 14:01 ..
+-rw-r--r--  1 root root     6148 Jun 12 14:14 .DS_Store
+-rw-r--r--  1 root root 93265816 May 22 23:23 ARC_PPI_2024_20250522_232250.xlsx
+-rw-rw-r--  1 root root 46607872 Jun 12 04:01 IAC_Database_20250612.xls
+-rw-r--r--  1 root root  2599345 May 22 13:53 SIC to NAICS_EM_Dylan.xlsx
+-rw-r--r--  1 root root  6743552 May 22 23:23 annual_generation_state_2024.xls
+-rw-r--r--  1 root root  2050220 May 22 23:23 emission_annual_2024.xlsx
+2025-06-12 14:15:51 - Running: process_iac.py
+2025-06-12 14:16:39 - process_iac.py completed successfully
+2025-06-12 14:16:39 - Step 1 completed: Processed assess and recc data
+2025-06-12 14:16:39 - Running: generate_ec_emission_factors.py
+2025-06-12 14:16:56 - generate_ec_emission_factors.py completed successfully
+2025-06-12 14:16:56 - Step 2 completed: Generated EC emission factors
+2025-06-12 14:16:56 - Running: process_ppi.py
+2025-06-12 14:16:59 - process_ppi.py completed successfully
+2025-06-12 14:16:59 - Step 3 completed: Processed PPI dataset
+2025-06-12 14:16:59 - Running: integrate_data.py
+2025-06-12 14:17:20 - integrate_data.py completed successfully
+2025-06-12 14:17:20 - Step 4 completed: Final data integration
+2025-06-12 14:17:20 - Archiving raw data files
+2025-06-12 14:17:21 - Archived: ARC_PPI_2024_20250522_232250.xlsx as ARC_PPI_2024_20250522_232250_20250612_141551.xlsx
+2025-06-12 14:17:21 - Archived: IAC_Database_20250612.xls as IAC_Database_20250612_20250612_141551.xls
+2025-06-12 14:17:21 - Archived: SIC to NAICS_EM_Dylan.xlsx as SIC to NAICS_EM_Dylan_20250612_141551.xlsx
+2025-06-12 14:17:21 - Archived: annual_generation_state_2024.xls as annual_generation_state_2024_20250612_141551.xls
+2025-06-12 14:17:21 - Archived: emission_annual_2024.xlsx as emission_annual_2024_20250612_141551.xlsx
+2025-06-12 14:17:21 - === Pipeline completed successfully ===

@@ -28,3 +28,18 @@ ENV/
 .vscode/
 *.swp
 .DS_Store
+
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Log files 
+*.log
+logs/
+
+# Git files
+.git
+.gitignore
+
+# Development files
+*.tmp

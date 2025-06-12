@@ -1,0 +1,11 @@
+2025-06-08 16:22:12 - === Starting data pipeline ===
+2025-06-08 16:22:12 - Base directory: /app
+2025-06-08 16:22:12 - Raw data directory: /app/data/raw
+2025-06-08 16:22:12 - Contents of raw directory:
+total 45508
+drwxr-xr-x  3 root root       96 Jun  8 16:19 .
+drwxr-xr-x 10 root root      320 May 23 22:13 ..
+-rw-rw-r--  1 root root 46599680 Jun  8 04:01 IAC_Database_20250608.xls
+2025-06-08 16:22:12 - Running: process_iac.py
+2025-06-08 16:22:40 - ERROR: process_iac.py failed with status 1
+2025-06-08 16:22:40 - ERROR: Failed at Step 1. Exiting pipeline.

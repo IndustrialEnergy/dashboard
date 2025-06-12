@@ -1,0 +1,21 @@
+2025-06-11 23:56:02 - === Starting data pipeline ===
+2025-06-11 23:56:02 - Base directory: /Users/oksi/workspace/cp_industrialenergy/dashboard
+2025-06-11 23:56:02 - Raw data directory: /Users/oksi/workspace/cp_industrialenergy/dashboard/data/raw
+2025-06-11 23:56:02 - Contents of raw directory:
+total 0
+drwxr-xr-x@  2 oksi  staff   64 Jun  9 12:26 .
+drwxr-xr-x@ 10 oksi  staff  320 May 23 22:13 ..
+2025-06-11 23:56:02 - Running: process_iac.py
+2025-06-11 23:56:03 - process_iac.py completed successfully
+2025-06-11 23:56:03 - Step 1 completed: Processed assess and recc data
+2025-06-11 23:56:03 - Running: generate_ec_emission_factors.py
+2025-06-11 23:56:03 - generate_ec_emission_factors.py completed successfully
+2025-06-11 23:56:03 - Step 2 completed: Generated EC emission factors
+2025-06-11 23:56:03 - Running: process_ppi.py
+2025-06-11 23:56:04 - process_ppi.py completed successfully
+2025-06-11 23:56:04 - Step 3 completed: Processed PPI dataset
+2025-06-11 23:56:04 - Running: integrate_data.py
+2025-06-11 23:56:16 - integrate_data.py completed successfully
+2025-06-11 23:56:16 - Step 4 completed: Final data integration
+2025-06-11 23:56:16 - Archiving raw data files
+2025-06-11 23:56:16 - === Pipeline completed successfully ===
