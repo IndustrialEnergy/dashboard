@@ -1,0 +1,36 @@
+---
+title: "Technical User Guides"
+format: 
+  html:
+    toc: false
+    theme: flatly
+    embed-resources: true
+    standalone: true
+    lightbox: true
+    css: |
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+---
+
+### [📦 Installation Guide](dashboard_installation_guide.html)
+Set up the dashboard on your local machine
+
+### [🔄 Data Update Guide](data_update_guide.html) 
+- Generate integrated datasets for your own analysis
+- Refresh the dashboard with latest data
+
+### [⬆️ Dashboard Update Guide](update_dashboard_guide.html)
+Add new visualizations and components to the dashboard
+
+---
+
+## 📖 User Manuals
+
+- **[Dashboard User Manual (PDF)](/assets/User_Guide.pdf)** - Learn how to navigate and use the dashboard
+- **[Technical Documentation (PDF)](/assets/Technical_Documentation.pdf)** - Project development and implementation details
+
+---
+
+**New to the dashboard?** Start with the Dashboard User Manual

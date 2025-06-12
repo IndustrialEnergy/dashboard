@@ -48,12 +48,4 @@ def emissions_so2_callback(app, boxplot_so2_df):
             dff = filter_outliers(
                 dff, "emissions_avoided", std_threshold=remove_outliers
             )
-
-        # # [TEST - REMOVE BEFORE PROD] print filtered data info
-        # print(f"dummy: {dummy_df.head(30)}")
-        # print(f"dummy: {dummy_df.shape}")
-        # # print(f"Filtered unique statuses: {dff['impstatus'].unique()}")
-        # print(f"Filtered data shape: {dff.shape}")
-        # print(dff.head(30))
-
         return create_boxplot_so2_chart(dff)

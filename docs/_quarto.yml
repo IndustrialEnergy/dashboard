@@ -1,0 +1,19 @@
+project:
+  type: website
+  output-dir: ../dashboard_app/assets/docs
+
+website:
+  search: false 
+
+format:
+  html:
+    toc: false
+    theme: flatly
+    embed-resources: true
+    standalone: true
+    lightbox: true
+    css: |
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      } 

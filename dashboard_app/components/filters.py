@@ -20,13 +20,6 @@ def create_filters(df):
     arc_wildcards = get_wildcard_patterns(unique_arc_codes, "arc", df)
     naics_wildcards = get_wildcard_patterns(unique_naics_codes, "naics")
 
-    # Debug: Print what wildcards are being generated
-    print(f"Generated ARC wildcards: {[w['label'] for w in arc_wildcards]}")
-    print(f"Generated NAICS wildcards: {[w['label'] for w in naics_wildcards]}")
-    print(
-        f"Sample NAICS codes in data: {sorted(unique_naics_codes)[:10]}"
-    )  # First 10 codes
-
     return html.Div(
         [
             # First row - Year slider and Implementation Status

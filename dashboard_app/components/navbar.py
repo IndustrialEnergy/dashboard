@@ -29,10 +29,10 @@ def create_navbar():
                         children=[
                             dbc.Nav(
                                 [
-                                    dbc.NavItem(dbc.NavLink("About", href="/about")),
                                     dbc.NavItem(
                                         dbc.NavLink("Dashboard", href="/dashboard")
                                     ),
+                                    dbc.NavItem(dbc.NavLink("About", href="/about")),
                                     dbc.NavItem(dbc.NavLink("Data", href="/data")),
                                     dbc.NavItem(
                                         dbc.NavLink(
