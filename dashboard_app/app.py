@@ -31,6 +31,10 @@ from dashboard_app.callbacks.download_buttons_callback import download_csv
 from dashboard_app.callbacks.download_buttons_callback import download_excel
 from dashboard_app.callbacks.techdoc_callback import download_td_pdf
 from dashboard_app.callbacks.user_guide_callback import download_ug_pdf
+from dashboard_app.callbacks.data_page_callback import (
+    toggle_emissions_collapse,
+    toggle_diagram_modal,
+)
 
 # Import components
 from dashboard_app.components.download_buttons import get_data_from_local
@@ -186,6 +190,8 @@ def create_app():
     download_csv(app, get_data_from_local)
     download_td_pdf(app, get_td_from_local)
     download_ug_pdf(app, get_ug_from_local)
+    toggle_emissions_collapse(app)
+    toggle_diagram_modal(app)
 
     # URL routing
     app.layout = html.Div(

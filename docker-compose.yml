@@ -4,7 +4,11 @@ services:
     image: industrialenergy_data
     build: data/.
     volumes:
-      - ./data:/app/data/
+      - ./data/raw:/app/data/raw
+      - ./data/processed:/app/data/processed
+      - ./data/final:/app/data/final
+      - ./data/archive:/app/data/archive
+      - ./data/.logs:/app/data/.logs
     ports:
       - 3010:3010
     environment:

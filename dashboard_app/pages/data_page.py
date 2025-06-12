@@ -1098,7 +1098,7 @@ def create_data_page():
                                                     bordered=True,
                                                     hover=True,
                                                     responsive=True,
-                                                    size="sm",
+                                                    striped=True,
                                                 ),
                                                 id="collapse-emissions",
                                                 is_open=False,

@@ -1,0 +1,10 @@
+2025-06-11 23:51:32 - === Starting data pipeline ===
+2025-06-11 23:51:32 - Base directory: /Users/oksi/workspace/cp_industrialenergy/dashboard
+2025-06-11 23:51:32 - Raw data directory: /Users/oksi/workspace/cp_industrialenergy/dashboard/data/raw
+2025-06-11 23:51:32 - Contents of raw directory:
+total 0
+drwxr-xr-x@  2 oksi  staff   64 Jun  9 12:26 .
+drwxr-xr-x@ 10 oksi  staff  320 May 23 22:13 ..
+2025-06-11 23:51:32 - Running: process_iac.py
+2025-06-11 23:51:32 - ERROR: process_iac.py failed with status 1
+2025-06-11 23:51:32 - ERROR: Failed at Step 1. Exiting pipeline.
