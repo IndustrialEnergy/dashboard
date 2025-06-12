@@ -10,4 +10,5 @@ data/raw/
 data/processed/
 data/final/
 data/archive/
-data/logs/  
+data/logs/ 
+.quarto/
