@@ -20,9 +20,6 @@ def emissions_co2_callback(app, boxplot_co2_df):
     ):
         # Start with full dataset
         dff = boxplot_co2_df.copy()
-        dummy_df = boxplot_co2_df[
-            (boxplot_co2_df["state"] == "TX") & (boxplot_co2_df["arc2"] == "2.7492")
-        ]
 
         # Apply NAICS filter with wildcard support
         if naics_imputed:
@@ -50,12 +47,4 @@ def emissions_co2_callback(app, boxplot_co2_df):
             dff = filter_outliers(
                 dff, "emissions_avoided", std_threshold=remove_outliers
             )
-
-        # [TEST - REMOVE BEFORE PROD] print filtered data info
-        print(f"dummy: {dummy_df.head(30)}")
-        print(f"dummy: {dummy_df.shape}")
-        # print(f"Filtered unique statuses: {dff['impstatus'].unique()}")
-        print(f"Filtered data shape: {dff.shape}")
-        print(dff.head(30))
-
         return create_boxplot_co2_chart(dff)

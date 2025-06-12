@@ -1,0 +1,208 @@
+---
+title: "Industrial Energy Dashboard Documentation"
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    theme: flatly
+    embed-resources: true
+    standalone: true
+    code-fold: false
+    code-tools: true
+    lightbox: true
+    css: |
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+---
+
+## Data Update Pipeline Structure
+
+All data update scripts are stored in `tools/data_pipeline`.
+The diagram shows the automated workflow that generates a final integrated dataset used in the dashboard.
+
+::: {style="text-align: center;"}
+![](../dashboard_app/assets/data_pipeline.png){width=100%}
+
+*Data processing pipeline from raw files to dashboard*
+:::
+
+## Local Data Update Process
+
+### When to Use Local Processing
+- 🧪 **Testing new data** before production deployment
+- 🔧 **Development work** or making code changes
+- 🏠 **Personal analysis** or data exploration
+- 🐛 **Debugging** data processing issues
+- 📊 **Verifying data quality** before server deployment
+
+### Prerequisites for Local Processing
+
+#### 1. System Requirements
+- Docker installed and running
+- Dashboard repository cloned locally  
+- Access to new data files
+
+#### 2. Environment Setup
+Follow the [Dashboard Installation Guide](dashboard_installation_guide.html) to install the dashboard in a local environment.
+
+
+#### 3. Data Folder Structure
+
+2. Configure Folder Structure in `Dashboard/Data` directory
+
+#### Folder Structure Configuration
+
+| Folder | Purpose | Content | Important Notes |
+|--------|---------|---------|-----------------|
+| **`raw/`** | New data files | Only updated files that have changed | • Files moved to `archive/` after processing<br>• Don't re-upload unchanged files<br>• Source for pipeline input |
+| **`processed/`** | Intermediate files | • Auto-generated pipeline files<br>• Static reference files (e.g., `arc_descriptions.csv`) | • Edit static files directly in this folder if needed<br>• Contains both generated and manual files |
+| **`final/`** | Dashboard data | Fully integrated dataset (`iac_integrated.csv`) | • Auto-generated after pipeline runs<br>• Used directly by dashboard |
+| **`archive/`** | Historical files | Original raw files after processing | • Automatic backup of processed files<br>• For reference and rollback |
+
+: Data folder organization and workflow {#tbl-folders}
+
+#### 4. Update Data
+Follow the steps below to update the dashboard data on a local computer.
+
+---
+
+#### Step 1: Upload Updated Files
+
+| Expected File Name | Example | Data Source |
+|-------------------|---------|-------------|
+| `ARC_PPI_YYYY.xlsx` | `ARC_PPI_2024.xlsx` | [Google Drive](https://drive.google.com/drive/folders/1-DjFb8lP9sdhHdnQdCWJLMNzRa0PeY7n?usp=sharing) |
+| `IAC_Database_YYYYMMDD.xls` | `IAC_Database_20250518.xlsx` | [IAC Website](https://iac.university/download) |
+| `annual_generation_state_YYYY.xls` | `annual_generation_state_2024.xls` | U.S. Energy Information Administration (EIA), Electric Power Annual, Generation and thermal output, Detailed preliminary EIA-923 monthly and annual survey data, State-level generation and fuel consumption data annual (back to 1990) [EIA State Generation Data](https://www.eia.gov/electricity/data.php#elecenv) |
+| `emission_annual_YYYY.xlsx` | `emission_annual_2024.xlsx` | U.S. Energy Information Administration (EIA), Electric Power Annual , Detailed EIA-923 emissions survey data, Electric power industry estimated emissions by state (back to 1990 ). [EIA Annual Emissions Data](https://www.eia.gov/electricity/data.php#elecenv) |
+
+: Required data files with naming conventions {#tbl-data-files}
+
+**Upload Process:**
+
+1. Place new files in the `data/raw/` folder
+
+::: {.callout-important}
+**Important**: Only upload files that changed since the last data update. Unchanged files are already stored in the `processed/` folder and do not need to be re-uploaded.
+:::
+
+2. Verify file names match the expected patterns shown in @tbl-data-files
+
+
+---
+
+#### Step 2: Process Data
+
+From the dashboard repository root folder, run the data processing pipeline.
+
+##### Option 1: Docker (Recommended)
+
+```bash
+# Build and run the pipeline
+docker-compose --profile pipeline build
+docker-compose --profile pipeline run --rm industrialenergy_datapipeline
+```
+
+##### Option 2: Direct Script Execution
+
+::: {.callout-important}
+**Prerequisites**: Make sure your conda environment is activated before running the script:
+
+```bash
+conda activate industrialenergy  # or your environment name
+```
+:::
+
+```bash
+# Make script executable (only needed once)
+chmod +x tools/data_pipeline/run_pipeline.sh
+
+# Run the pipeline (from dashboard root directory)
+./tools/data_pipeline/run_pipeline.sh
+```
+
+##### What to Expect
+- **Build time**: 2-3 minutes (ensures fresh environment)
+- **Processing time**: 3-5 minutes for data pipeline
+- **Total time**: ~5-8 minutes
+
+#### Step 3: Verify Output
+Check that these files were created:
+- `data/final/iac_integrated.csv`
+- `data/final/iac_metadata.json`
+
+
+## Server Data Update Process
+
+#### When to Use Server Processing
+- 🚀 **Production data updates** for live dashboard
+- 👥 **Team updates** when multiple people need access
+
+### Prerequisites for Server Processing
+- SSH access to Bren server
+- Credentials for server connection. Contact compute@bren.ucsb.edu to request access.
+
+::: {.callout-note}
+For SSH connection instructions, consult the guide [Using VS Code to SSH into Bren Servers](https://bren.zendesk.com/hc/en-us/articles/34725004003988-Using-VS-Code-to-SSH-into-Bren-Servers)
+:::
+
+#### Step 1: Access Bren Server
+Path: apps.bren.ucsb.edu/capstone/industrialenergy/dashboard/
+```bash
+ssh username@bren-server
+cd capstone/industrialenergy/dashboard/  # Navigate to dashboard directory
+```
+
+#### Step 2: Upload New Data to Server
+
+| Expected File Name | Example | Data Source |
+|-------------------|---------|-------------|
+| `ARC_PPI_YYYY.xlsx` | `ARC_PPI_2024.xlsx` | [Google Drive](https://drive.google.com/drive/folders/1-DjFb8lP9sdhHdnQdCWJLMNzRa0PeY7n?usp=sharing) |
+| `IAC_Database_YYYYMMDD.xls` | `IAC_Database_20250518.xlsx` | [IAC Website](https://iac.university/download) |
+| `annual_generation_state_YYYY.xls` | `annual_generation_state_2024.xls` | [EIA State Generation Data](https://www.eia.gov/electricity/data.php#elecenv) |
+| `emission_annual_YYYY.xlsx` | `emission_annual_2024.xlsx` | [EIA Annual Emissions Data](https://www.eia.gov/electricity/data.php#elecenv) |
+
+: Required data files with naming conventions {#tbl-data-files}
+
+From your **local machine**, upload the data files to the server:
+
+::: {.callout-important}
+**Important**: Only upload files that changed since the last data update. Unchanged files are already stored in the `processed/` folder and do not need to be re-uploaded.
+:::
+
+Example:
+```bash
+# Upload raw data files from local folder to server
+scp IAC_Database_20250215.xls username@bren-server:apps.bren.ucsb.edu/capstone/industrialenergy/dashboard/data/raw
+scp ARC_PPI_2024.xlsx username@bren-server:apps.bren.ucsb.edu/capstone/industrialenergy/dashboard/data/raw
+
+```
+
+#### Step 3: Process Data on Server
+Back on the **server terminal**:
+Ensure you are in the dashboard root folder `capstone/industrialenergy/dashboard`
+```bash
+# Build and run the pipeline
+docker-compose --profile pipeline build
+docker-compose --profile pipeline run --rm industrialenergy_datapipeline
+```
+
+#### Step 4: Verify Server Results
+Check the processed files were created:
+```bash
+ls -la data/final/
+# Should show updated timestamps for:
+# - iac_integrated.csv
+# - iac_metadata.json
+```
+
+#### Step 5: Test Live Dashboard
+Visit the live dashboard: [Industrial Energy Efficiency Dashboard/](https://industrialenergy.apps.bren.ucsb.edu/dashboard)
+
+Verify:\
+- [ ] "Based on IAC assessment data from: [**New Date**]" shows correct date\
+- [ ] Charts load without errors\
+- [ ] Data looks reasonable\
+
+---

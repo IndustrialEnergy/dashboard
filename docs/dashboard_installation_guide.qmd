@@ -1,0 +1,238 @@
+---
+title: "Industrial Energy Dashboard Installation Guide"
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    theme: flatly
+    embed-resources: true
+    standalone: true
+    fontsize: "16px"
+    code-fold: false
+    code-tools: true
+    lightbox: true
+    css: |
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+---
+
+## Local Machine Installation
+
+::: {.callout-note collapse="true"}
+## Development Environment Setup (Click to expand if you need to install prerequisites)
+
+1. **Install VS Code** (if not already installed)
+   - Download from: https://code.visualstudio.com/
+
+2. **Install Anaconda** (if not already installed)
+   - Download from: https://www.anaconda.com/
+
+3. **Install Docker Desktop** (required for production)
+   - Download from: https://docs.docker.com/desktop/
+   - Launch Docker Desktop after installation
+
+::: {.callout-important}
+Docker Desktop is required for production deployments. Even if you plan to run locally for development only, installing Docker ensures you can test the production environment.
+:::
+
+4. **Setup Git and GitHub Access**
+
+    4.1 **Verify Git Installation**
+    - Check if Git is already installed: `git --version`
+    - If not installed:
+      - **macOS**: Install Xcode Command Line Tools: `xcode-select --install`
+      - **Linux**: Use package manager: `sudo apt install git` (Ubuntu) or `sudo yum install git` (CentOS)
+      - **Windows**: Download from https://git-scm.com/downloads
+
+    4.2 **Setup GitHub SSH Access**
+    - Generate SSH key if you don't have one: `ssh-keygen -t ed25519 -C "your_email@example.com"`
+    - Add SSH key to your GitHub account
+    - For detailed instructions: https://docs.github.com/en/authentication/connecting-to-github-with-ssh
+    - Verify SSH connection: `ssh -T git@github.com`
+:::
+
+4. **Clone the Repository**
+   ```bash
+   git clone git@github.com:IndustrialEnergy/dashboard.git
+   ```
+
+5. **Create Conda Environment**
+   ```bash
+   conda env create -f environment.yml
+   ```
+
+6. **Activate the Environment**
+   ```bash
+   conda activate industrialenergy
+   ```
+
+7. **Update File Structure**
+   - Create missing folders on your local machine (some folders are in `.gitignore` and not in the remote repo)
+   - Choose one of the methods below:
+
+::: {.callout-note}
+These directories are excluded from Git but are essential for the dashboard to work properly. You must create them manually.
+:::
+
+   **Method A: Using Terminal Commands**
+
+   ```bash
+   # Create all required data directories
+   mkdir -p data/{raw,processed,final,archive,logs}
+   
+   # Create local development directory
+   mkdir -p local
+   
+   # Create environment file (add your variables as needed)
+   touch .env
+   ```
+
+   **Method B: Manual Creation (using Finder/File Explorer)**
+
+   - Navigate to your cloned `dashboard/data` folder
+   - Inside the `data` folder, create 5 subfolders: `raw`, `processed`, `final`, `archive`, `logs`
+   - In the main `dashboard` folder, create a folder called `local` (optional, for local development files and temporary storage)
+   - Create an empty file called `.env` in the main `dashboard` folder
+
+8. **Configure Environment Variables**
+   - Open the `.env` file you created in step 7
+   - Add the following configuration (optional for local development):
+
+   ```bash
+   # Debug mode for local development (default: true)
+   DASH_DEBUG=true
+   
+   # Data directory path (used in Docker configuration)
+   # DATA_DIR=/app/data/final
+   
+   # Base pathname for dashboard URL
+   # DASH_BASE_PATHNAME=/
+   ```
+
+::: {.callout-tip}
+For basic local development, you can leave the `.env` file empty or just add `DASH_DEBUG=true` to enable hot-reloading.
+:::
+
+::: {.callout-note collapse="true"}
+## Required Directory Structure (Click to expand)
+
+```
+dashboard/
+├── README.md
+├── INSTALLATION_GUIDE.md
+├── LICENSE
+├── .gitignore
+├── environment.yml
+├── docker-compose.yml
+├── Dockerfile
+├── Dockerfile.pipeline
+├── .dockerignore
+├── .env                          # ⚠️ CREATE MANUALLY - Environment variables
+├── dashboard_app/
+│   ├── server.py
+│   ├── pages/
+│   ├── components/
+│   ├── callbacks/
+│   └── utils/
+├── data/                         
+│   ├── raw/                      # ⚠️ CREATE MANUALLY - Raw data files
+│   ├── processed/                # ⚠️ CREATE MANUALLY - Intermediate processed data
+│   ├── final/                    # ⚠️ CREATE MANUALLY - Final integrated datasets
+│   ├── archive/                  # ⚠️ CREATE MANUALLY - Archived/backup data
+│   └── logs/                     # ⚠️ CREATE MANUALLY - Data processing logs
+├── local/                        # ⚠️ CREATE MANUALLY - Local development files (optional)
+├── assets/
+│   ├── images/
+│   ├── css/
+│   └── js/
+├── docs/
+│   └── documentation files
+├── tools/
+│   └── utility scripts
+└── test/
+    └── test files
+```
+:::
+
+## Running the Dashboard
+
+### Copy Integrated Dataset File (.csv) 
+
+- Download the dataset `iac_integrated.csv` from: https://apps.bren.ucsb.edu/IE-Data/final/
+- Place files in your local `data/final` folder
+- For SSH connection instructions, consult the guide: [Using VS Code to SSH into Bren Servers](https://bren.zendesk.com/hc/en-us/articles/34725004003988-Using-VS-Code-to-SSH-into-Bren-Servers)
+
+::: {.callout-note}
+To update the integrated dataset with the latest data, consult the [Data Update Guide](data_update_guide.html).
+:::
+
+### Method 1: Run Locally (Development)
+
+1. **Navigate to Root Folder**
+
+   ```bash
+   cd /path/to/dashboard
+   ```
+
+2. **Start the Dashboard**
+
+   ```bash
+   python dashboard_app/server.py
+   ```
+
+3. **Access the Dashboard**
+   - Open your browser and go to: `http://localhost:3009/dashboard`
+
+### Method 2: Run Dashboard with Docker 
+(Required for Production env on the server)
+
+#### Prerequisites
+1. **Install Docker Desktop**
+   - Download from: `https://docs.docker.com/desktop/`
+   - Launch Docker Desktop after installation
+
+#### Setup and Run
+
+1. **Navigate to Dashboard Root**
+
+   ```bash
+   cd ../dashboard/
+   ```
+
+2. **Clean Previous Containers**
+
+   ```bash
+   docker-compose down --volumes
+   ```
+
+3. **Rebuild Images**
+
+   ```bash
+   docker-compose build --no-cache
+   ```
+
+4. **Start Containers**
+
+   ```bash
+   docker-compose up -d industrialenergy_data industrialenergy_dashboard
+   ```
+
+5. **Access the Dashboard**
+   - Open your browser and go to: `http://localhost:3009/dashboard`
+
+#### Docker Management
+- View all containers and their status in Docker Desktop application
+- Monitor logs and manage containers through the Docker Desktop interface
+
+## Important Notes
+
+⚠️ **Port Conflict Warning**: You can start the dashboard using **either** Docker **or** by running `python dashboard_app/server.py` directly—but **not both at the same time**. Running both simultaneously will result in a "port already in use" error.
+
+## Troubleshooting
+
+- If you encounter port conflicts, make sure to stop any running instances before starting a new one
+- For SSH connection issues, refer to the Bren Server SSH guide
+- Check Docker Desktop for container status and logs if using Docker method
+- Ensure all required folders exist as specified in the Repository Organization section 

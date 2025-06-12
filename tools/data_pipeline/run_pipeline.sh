@@ -39,7 +39,7 @@ run_python_script() {
     fi
     
     # Pass necessary directories as arguments to the Python script
-    python3 "$script_path" \
+    python "$script_path" \
         --raw "$RAW_DIR" \
         --processed "$PROCESSED_DIR" \
         --output "$DATA_DIR" \

@@ -38,12 +38,9 @@ from dashboard_app.components.techdoc_downloadbttn import get_td_from_local
 from dashboard_app.components.userguide_downloadbttn import get_ug_from_local
 
 
-
 def create_app():
     # get absolute path to assets folder - now inside dashboard_app
     assets_path = os.path.join(os.path.dirname(__file__), "assets")
-
-    print(f"Assets path: {assets_path}")  # Debug print
 
     app = Dash(
         __name__,
@@ -60,8 +57,6 @@ def create_app():
 
     # load data
     integrated_df = load_integrated_dataset()
-    print(integrated_df.shape)
-    print(integrated_df.info())
 
     filters_df = integrated_df[
         [
@@ -177,7 +172,7 @@ def create_app():
             "conserved",
         ]
     ].drop_duplicates()
-    
+
     # initialize callbacks
     cost_boxplot_callback(app, boxplot_cost_df)
     payback_boxplot_callback(app, boxplot_payback_df)
@@ -199,15 +194,16 @@ def create_app():
 
     @app.callback(Output("page-content", "children"), Input("url", "pathname"))
     def display_page(pathname):
-        print(f"\nRouting request for pathname: {pathname}")  # Debug print
         if pathname == "/home":
-            return create_home_page()
-        if pathname == "/about":
-            return create_about_page()
-        elif pathname == "/dashboard":
             return create_dashboard_page(
                 filters_df, reference_year=integrated_df["reference_year"].max()
             )
+        if pathname == "/dashboard":
+            return create_dashboard_page(
+                filters_df, reference_year=integrated_df["reference_year"].max()
+            )
+        elif pathname == "/about":
+            return create_about_page()
         elif pathname == "/documentation":
             return create_docs_page()
         elif pathname == "/data":
@@ -215,8 +211,9 @@ def create_app():
         elif pathname == "/contact":
             return create_contact_page()
         else:
-            print(f"No route match, defaulting to home page")  # debug print
-            return create_home_page()
+            return create_dashboard_page(
+                filters_df, reference_year=integrated_df["reference_year"].max()
+            )
 
     # navbar toggle callback
     @app.callback(
@@ -235,4 +232,3 @@ def create_app():
 if __name__ == "__main__":
     app = create_app()
     app.run_server(debug=True)
- 

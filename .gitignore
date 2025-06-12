@@ -6,4 +6,9 @@ local/
 **/__pycache__/
 __pycache__/
 .env
-data/
+data/raw/
+data/processed/
+data/final/
+data/archive/
+data/logs/ 
+.quarto/

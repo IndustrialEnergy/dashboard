@@ -1,0 +1,354 @@
+---
+title: "Dashboard Development Guide"
+subtitle: "Adding charts and modifying components"
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    theme: flatly
+    embed-resources: true
+    standalone: true
+    lightbox: true
+    css: |
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+---
+
+## Overview
+
+This guide shows you how to add new charts to the dashboard. We'll walk through adding a **"Average Payback Period Over Time"** chart that shows economic trends in energy efficiency investments.
+
+---
+
+## Prerequisites
+
+- [ ] Dashboard installed locally ([Installation Guide](dashboard_installation_guide.html))
+- [ ] Local dashboard running at `http://localhost:3009`
+- [ ] Basic Python knowledge
+
+---
+
+## Step-by-Step: Adding Average Payback Period Trends
+
+### Step 1: Create the Chart Function
+
+Create new file: `dashboard_app/charts/payback_trends_chart.py`
+
+```python
+import plotly.express as px
+import pandas as pd
+
+def create_payback_trends_chart(filtered_df):
+    """Create a line chart showing average payback period trends over time."""
+    
+    # Filter out invalid payback periods
+    clean_data = filtered_df[
+        (filtered_df['payback_imputed'] > 0) & 
+        (filtered_df['payback_imputed'] < 20) &  # Remove unrealistic values
+        (filtered_df['payback_imputed'].notna())
+    ]
+    
+    if clean_data.empty:
+        # Return empty chart if no data
+        fig = px.line(title="Average Payback Period Over Time")
+        fig.add_annotation(text="No data available for current filters", 
+                          x=0.5, y=0.5, showarrow=False)
+        return fig
+    
+    # Calculate average payback by fiscal year
+    yearly_avg = clean_data.groupby('fy')['payback_imputed'].agg([
+        'mean', 'count'
+    ]).reset_index()
+    
+    # Only include years with sufficient data
+    yearly_avg = yearly_avg[yearly_avg['count'] >= 5]
+    
+    # Create line chart
+    fig = px.line(
+        yearly_avg,
+        x='fy',
+        y='mean',
+        labels={
+            'fy': 'Fiscal Year',
+            'mean': 'Average Payback Period (years)'
+        },
+        markers=True,
+        template="plotly_white",
+    )
+    
+    # Styling
+    fig.update_layout(
+        height=400,
+        margin=dict(l=0, r=0, t=40, b=0),
+        xaxis=dict(title='Fiscal Year'),
+        yaxis=dict(title='Average Payback Period (years)'),
+        showlegend=False
+    )
+    
+    return fig
+```
+
+### Step 2: Create the Callback Function
+
+Create new file: `dashboard_app/callbacks/payback_trends_callback.py`
+
+```python
+from dash import Input, Output
+from dashboard_app.helpers.apply_wildcard_filter import apply_wildcard_filter
+from dashboard_app.helpers.filter_outliers import filter_outliers
+from dashboard_app.charts.payback_trends_chart import create_payback_trends_chart
+
+
+def payback_trends_callback(app, df):
+    @app.callback(
+        Output("payback-trends-chart", "figure"),
+        [
+            Input("sector-filter", "value"),
+            Input("arc-filter", "value"), 
+            Input("state-filter", "value"),
+            Input("fy-filter", "value"),
+            Input("impstatus-filter", "value"),
+            Input("outlier-filter", "value"),
+        ]
+    )
+    def update_payback_trends_chart(sectors, arcs, states, fy_range, imp_status, outlier_threshold):
+        # Apply filters
+        filtered_df = df.copy()
+        
+        # Apply sector filter
+        if sectors:
+            filtered_df = apply_wildcard_filter(filtered_df, sectors, "naics_imputed")
+        
+        # Apply ARC filter
+        if arcs:
+            filtered_df = apply_wildcard_filter(filtered_df, arcs, "arc2")
+            
+        # Apply state filter
+        if states:
+            filtered_df = filtered_df[filtered_df["state"].isin(states)]
+            
+        # Apply fiscal year filter
+        if fy_range:
+            filtered_df = filtered_df[
+                (filtered_df["fy"] >= fy_range[0]) & 
+                (filtered_df["fy"] <= fy_range[1])
+            ]
+            
+        # Apply implementation status filter
+        if imp_status:
+            filtered_df = filtered_df[filtered_df["impstatus"].isin(imp_status)]
+        
+        # Apply outlier filtering
+        if outlier_threshold > 0:
+            filtered_df = filter_outliers(filtered_df, 'payback_imputed', outlier_threshold)
+        
+        return create_payback_trends_chart(filtered_df)
+```
+
+### Step 3: Add Chart to Dashboard Layout
+
+#### 3.1 Add Chart to Investment Metrics Section
+Find the Investment Metrics section and add your chart:
+
+```python
+# SECTION: Investment Metrics
+dbc.Row([
+    dbc.Col(
+        html.H4("Investment Metrics", className="section-header mt-4 mb-3"),
+        width=12,
+    )
+]),
+dbc.Row([
+    dbc.Col([
+        dbc.Card([
+            dbc.CardHeader(f"Implementation Cost Distribution ({reference_year} Year PPI-Adjusted Dollars)"),
+            dbc.CardBody([
+                dcc.Graph(id="cost-boxplot")
+            ])
+        ])
+    ], width=4),
+    
+    dbc.Col([
+        dbc.Card([
+            dbc.CardHeader("Simple Payback Period Distribution"),
+            dbc.CardBody([
+                dcc.Graph(id="payback-boxplot")
+            ])
+        ])
+    ], width=4),
+    
+    # NEW CHART - Add this column
+    dbc.Col([
+        dbc.Card([
+            dbc.CardHeader("Average Payback Period Trends"),
+            dbc.CardBody([
+                dcc.Graph(id="payback-trends-chart")
+            ])
+        ])
+    ], width=4),
+]),
+```
+
+### Step 4: Update App.py
+
+#### 4.1 Add Callback Import
+Edit `dashboard_app/app.py`, add to the callback imports section:
+
+```python
+# import callbacks
+from dashboard_app.callbacks.cost_boxplot_callback import cost_boxplot_callback
+from dashboard_app.callbacks.payback_boxplot_callback import payback_boxplot_callback
+from dashboard_app.callbacks.payback_trends_callback import payback_trends_callback  # ← ADD THIS
+from dashboard_app.callbacks.emissions_co2_callback import emissions_co2_callback
+# ... rest of imports
+```
+
+#### 4.2 Create Dataset View
+Add this after the other dataset preparations (around line 150):
+
+```python
+# Add this new dataset for payback trends
+payback_trends_df = integrated_df[
+    [
+        "fy",
+        "naics_description", 
+        "naics_imputed",
+        "state",
+        "arc2",
+        "specific_description",
+        "impstatus",
+        "payback_imputed",
+    ]
+].drop_duplicates()
+```
+
+#### 4.3 Initialize Callback
+Add this after the other callback initializations (around line 170):
+
+```python
+# initialize callbacks
+cost_boxplot_callback(app, boxplot_cost_df)
+payback_boxplot_callback(app, boxplot_payback_df)
+payback_trends_callback(app, payback_trends_df)  # ← ADD THIS
+emissions_co2_callback(app, boxplot_co2_df)
+# ... rest of callback initializations
+```
+
+### Step 5: Test Your Chart
+
+```bash
+# Start dashboard
+python dashboard_app/app.py
+```
+
+Visit `http://localhost:8050` and check:
+- [ ] Chart appears in Investment Metrics section
+- [ ] Shows trends over time (line going up, down, or steady)
+- [ ] Updates when you change sector/ARC filters
+- [ ] Handles empty data gracefully
+
+### Step 6: Deploy (Optional)
+
+When ready to deploy to server, see [Deployment Guide](deployment-guide.html).
+
+---
+
+### Complete File Structure
+
+After adding your chart, you should have:
+
+```
+dashboard_app/
+├── charts/
+│ ├── existing_charts.py
+│ └── payback_trends_chart.py ← Step 1: Chart function
+├── callbacks/
+│ ├── existing_callbacks.py
+│ └── payback_trends_callback.py ← Step 2: Callback logic
+├── pages/
+│ └── dashboard_page.py ← Step 3: Layout update
+├── app.py ← Step 4: App registration
+└── components/
+└── filters.py
+```
+
+### Complete Checklist
+
+When adding any new chart, follow these steps:
+
+#### ✅ Step 1: Chart Function
+- [ ] Create chart function in `dashboard_app/charts/your_chart.py`
+- [ ] Include data validation and empty data handling
+- [ ] Test chart function independently
+
+#### ✅ Step 2: Callback Function  
+- [ ] Create callback file in `dashboard_app/callbacks/your_callback.py`
+- [ ] Include all necessary filter inputs
+- [ ] Apply filters using helper functions
+
+#### ✅ Step 3: Dashboard Layout
+- [ ] Import chart in `dashboard_page.py`
+- [ ] Add chart to layout with unique `id`
+- [ ] Ensure layout proportions look good
+
+#### ✅ Step 4: App Registration
+- [ ] Import callback in `app.py`
+- [ ] Create dataset view with relevant columns  
+- [ ] Initialize callback with app and dataset
+
+#### ✅ Step 5: Testing
+- [ ] Chart appears on dashboard
+- [ ] Filters work correctly
+- [ ] No console errors
+- [ ] Handles edge cases (empty data, single data point)
+
+---
+
+## Q&A / Troubleshooting
+
+### Chart Issues
+
+**Q: Chart doesn't appear on dashboard**
+- Check callback import in `app.py`
+- Verify chart `id` matches between layout and callback
+- Check for error messages in terminal
+
+**Q: Chart shows "No data available"**
+- Check filter combinations aren't too restrictive
+- Verify column names: `payback_imputed`, `fy`
+- Print data to debug: `print(filtered_df.shape)`
+
+**Q: Callback errors on startup**
+- Verify all imports are correct
+- Check dataset view includes required columns
+- Ensure callback function name is unique
+
+### App.py Issues
+
+**Q: "Module not found" errors**
+- Check callback import path is correct
+- Verify callback file exists in `dashboard_app/callbacks/`
+- Ensure callback function is properly exported
+
+**Q: Dashboard loads but filters don't work**
+- Check dataset view includes all filter columns
+- Verify callback inputs match filter component IDs
+- Test individual filter functions
+
+### Performance Issues
+
+**Q: Chart loads slowly**
+- Limit dataset size in app.py: `integrated_df.sample(n=10000)`
+- Optimize data aggregation in chart function
+- Consider pre-processing trends data
+
+### External Resources
+
+Still stuck? 
+- **Check existing charts**: Look at `dashboard_app/charts/` and `dashboard_app/callbacks/` for patterns
+- **Plotly time series docs**: [plotly.com/python/time-series/](https://plotly.com/python/time-series/)
+- **Dash Documentation** [Dash User Guide](https://dash.plotly.com)
+
+---
